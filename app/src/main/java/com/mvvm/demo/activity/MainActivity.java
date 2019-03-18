@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.mvvm.demo.Adapter.ViewPagerAdapter;
@@ -35,6 +36,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     BottomNavigationView navigator;
     @BindView(R.id.viewPager)
     ViewPager viewPager;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    private String[] mTitleStrs = {"首页", "项目", "体系", "导航", "公众号"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     private void initListener() {
         navigator.setOnNavigationItemSelectedListener(this);
         viewPager.addOnPageChangeListener(this);
+        onPageSelected(0);
     }
 
     @Override
@@ -102,6 +108,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     @Override
     public void onPageSelected(int index) {
         navigator.getMenu().getItem(index).setChecked(true);
+        toolbar.setTitle(mTitleStrs[index]);
     }
 
 

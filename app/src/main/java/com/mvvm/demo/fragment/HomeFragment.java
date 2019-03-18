@@ -1,5 +1,6 @@
 package com.mvvm.demo.fragment;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.base.lib.Logs;
 import com.mvvm.demo.BaseFragment;
 import com.mvvm.demo.R;
+import com.mvvm.demo.viewmodel.HomeViewModel;
 
 import butterknife.BindView;
 
@@ -22,8 +25,12 @@ import butterknife.BindView;
  */
 public class HomeFragment extends BaseFragment {
 
+    private static final String TAG = "HomeFragment";
+
     @BindView(R.id.textView)
     TextView textView;
+
+    HomeViewModel homeViewModel;
 
     public static Fragment newInstance() {
         return new HomeFragment();
@@ -38,6 +45,9 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        textView.setText("aaaaaa");
+        homeViewModel = new HomeViewModel(mContext.getApplication());
+        homeViewModel.getResult().observe(this, (String result) -> {
+            Logs.d(TAG, result);
+        });
     }
 }

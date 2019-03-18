@@ -4,6 +4,7 @@
     package="com.mvvm.demo">
 
     <application
+        android:name=".App"
         android:allowBackup="false"
         android:appComponentFactory="@string/app_name"
         android:icon="@mipmap/ic_launcher"

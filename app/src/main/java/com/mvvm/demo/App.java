@@ -3,8 +3,6 @@ package com.mvvm.demo;
 import android.app.Application;
 import android.os.Environment;
 
-import com.base.lib.log.Logs;
-
 import java.io.File;
 
 /**
@@ -13,7 +11,8 @@ import java.io.File;
  */
 public class App extends Application {
 
-    public static final String PATH =
+    //文件路径
+    public static final String LOG_PATH =
             Environment.getExternalStorageDirectory() + File.separator + BuildConfig.APPLICATION_ID + "/log/";
 
     @Override

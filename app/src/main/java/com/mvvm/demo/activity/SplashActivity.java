@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 
 import com.base.lib.IntentUtil;
 import com.base.lib.ToastUtil;
-import com.base.lib.log.Logs;
+import com.base.lib.Logs;
 import com.mvvm.demo.App;
 import com.mvvm.demo.BaseActivity;
 import com.mvvm.demo.BuildConfig;
@@ -71,9 +71,9 @@ public class SplashActivity extends BaseActivity {
      */
     private void openLogSystem() {
         //初始化全局异常捕获
-        new CrashHandler().init(this.getApplicationContext(), BuildConfig.DEBUG, App.PATH + "crash.log");
+        new CrashHandler().init(this.getApplicationContext(), BuildConfig.DEBUG, App.LOG_PATH + "crash.log");
         //初始化日志
-        Logs.configure(BuildConfig.DEBUG, App.PATH + "log.temp");
+        Logs.configure(BuildConfig.DEBUG, App.LOG_PATH + "log.temp");
     }
 
     /**

@@ -1,24 +1,25 @@
 package com.mvvm.demo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
+ * Fragment基类
+ *
  * @author yinbiao
  * @date 2019/3/8
  */
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
-    Context mContext;
+    protected Activity mContext;
     protected Unbinder unbinder;
 
     @Override
@@ -31,11 +32,14 @@ public class BaseFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //View注解框架绑定
+        unbinder = ButterKnife.bind(this, view);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
+        if (unbinder != null) {
+            unbinder.unbind();
+        }
     }
 }
