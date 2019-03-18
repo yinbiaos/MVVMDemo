@@ -30,7 +30,9 @@ public class SplashActivity extends BaseActivity {
 
     Disposable disposable;
 
-    //需要的权限集合
+    /**
+     * 需要的权限集合
+     */
     String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE};
 
     @Override
