@@ -60,6 +60,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         fragments.add(NavFragment.newInstance());
         fragments.add(PubFragment.newInstance());
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragments));
+        viewPager.setOffscreenPageLimit(fragments.size());
         initListener();
     }
 

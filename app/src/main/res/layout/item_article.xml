@@ -17,16 +17,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_author"
+        android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_weight="1"
-        android:padding="@dimen/dp_10"
-        android:text="作者：hzy"
-        android:textColor="@color/c_666666"
+        android:layout_margin="@dimen/dp_10"
+        android:lineSpacingExtra="@dimen/dp_3"
+        android:text="Android Handler: 手把手带你深入分析Handler机制源码gsgsgadsaghshdfahdfhfdhdfhdf"
+        android:textColor="@color/c_333333"
         android:textSize="@dimen/sp_14"
-        app:layout_constraintLeft_toRightOf="@+id/imv_like"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/imv_like"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -38,23 +40,21 @@
         android:textColor="@color/c_666666"
         android:textSize="@dimen/sp_14"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
     <TextView
-        android:id="@+id/tv_title"
+        android:id="@+id/tv_author"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_10"
-        android:layout_marginEnd="@dimen/dp_10"
-        android:lineSpacingExtra="@dimen/dp_3"
-        android:text="Android Handler: 手把手带你深入分析Handler机制源码gsgsgadsaghshdfahdfhfdhdfhdf"
-        android:textColor="@color/c_333333"
+        android:layout_centerVertical="true"
+        android:layout_weight="1"
+        android:padding="@dimen/dp_10"
+        android:text="作者：hzy"
+        android:textColor="@color/c_666666"
         android:textSize="@dimen/sp_14"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@+id/imv_like"
-        app:layout_constraintTop_toBottomOf="@+id/tv_author" />
+        app:layout_constraintLeft_toRightOf="@+id/imv_like"
+        app:layout_constraintRight_toLeftOf="@id/tv_chapterName"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
 
     <TextView
@@ -68,7 +68,7 @@
         android:text="时间：14小时之前"
         android:textColor="@color/c_666666"
         app:layout_constraintLeft_toRightOf="@+id/imv_like"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_author" />
 
     <TextView
         android:id="@+id/tv_new"
@@ -86,7 +86,7 @@
         android:textColor="@color/c_f9382a"
         android:visibility="visible"
         app:layout_constraintRight_toLeftOf="@+id/tv_project"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_author" />
 
     <TextView
         android:id="@+id/tv_project"
@@ -105,7 +105,7 @@
         android:textColor="@color/c_3fc75f"
         android:visibility="visible"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_author" />
 
     <View
         style="@style/horizontal_line"
