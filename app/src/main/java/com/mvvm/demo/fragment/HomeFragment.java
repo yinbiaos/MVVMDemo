@@ -1,6 +1,5 @@
 package com.mvvm.demo.fragment;
 
-import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -49,5 +48,6 @@ public class HomeFragment extends BaseFragment {
         homeViewModel.getResult().observe(this, (String result) -> {
             Logs.d(TAG, result);
         });
+        homeViewModel.getArticle(0);
     }
 }
