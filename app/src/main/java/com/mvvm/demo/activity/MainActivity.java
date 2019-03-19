@@ -8,7 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.mvvm.demo.Adapter.ViewPagerAdapter;
+import com.mvvm.demo.adapter.ViewPagerAdapter;
 import com.mvvm.demo.BaseActivity;
 import com.mvvm.demo.R;
 import com.mvvm.demo.fragment.HomeFragment;

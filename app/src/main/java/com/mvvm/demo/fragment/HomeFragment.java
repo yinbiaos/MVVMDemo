@@ -4,17 +4,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.base.lib.Logs;
 import com.mvvm.demo.BaseFragment;
 import com.mvvm.demo.R;
+import com.mvvm.demo.adapter.ArticleAdapter;
 import com.mvvm.demo.entity.ArticleBean;
 import com.mvvm.demo.entity.ResponseBean;
 import com.mvvm.demo.viewmodel.HomeViewModel;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 
@@ -28,10 +32,11 @@ public class HomeFragment extends BaseFragment {
 
     private static final String TAG = "HomeFragment";
 
-    @BindView(R.id.textView)
-    TextView textView;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
 
     HomeViewModel homeViewModel;
+    ArticleAdapter adapter;
 
     public static Fragment newInstance() {
         return new HomeFragment();
@@ -46,9 +51,16 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter = new ArticleAdapter(mContext, new ArrayList<>()));
+        initData();
+    }
+
+    private void initData() {
         homeViewModel = new HomeViewModel(mContext.getApplication());
         homeViewModel.getResult().observe(this, (ResponseBean<ArticleBean> result) -> {
-            Logs.d(TAG, result.toString());
+            adapter.addList(result.getData().getDatas());
         });
         homeViewModel.getArticle(1);
     }
