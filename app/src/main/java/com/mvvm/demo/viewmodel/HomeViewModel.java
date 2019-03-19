@@ -3,9 +3,7 @@ package com.mvvm.demo.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.base.lib.Logs;
 import com.mvvm.demo.entity.ArticleBean;
@@ -14,11 +12,7 @@ import com.mvvm.demo.http.HttpManager;
 import com.mvvm.demo.http.HttpService;
 import com.mvvm.demo.http.RxSchedulers;
 
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DefaultObserver;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author yinbiao
@@ -28,8 +22,10 @@ public class HomeViewModel extends AndroidViewModel {
 
     private static final String TAG = "HomeViewModel";
 
-    // 创建LiveData
-    private MutableLiveData<String> result = new MutableLiveData<>();
+    /**
+     * 创建LiveData
+     */
+    private MutableLiveData<ResponseBean<ArticleBean>> result = new MutableLiveData<>();
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
@@ -42,7 +38,7 @@ public class HomeViewModel extends AndroidViewModel {
         Logs.d(TAG, "onCleared:");
     }
 
-    public MutableLiveData<String> getResult() {
+    public MutableLiveData<ResponseBean<ArticleBean>> getResult() {
         return result;
     }
 
@@ -51,8 +47,8 @@ public class HomeViewModel extends AndroidViewModel {
                 .compose(RxSchedulers.ioMain())
                 .subscribe(new DefaultObserver<ResponseBean<ArticleBean>>() {
                     @Override
-                    public void onNext(ResponseBean<ArticleBean> result) {
-                        Logs.d(TAG, result.toString());
+                    public void onNext(ResponseBean<ArticleBean> responseBean) {
+                        result.setValue(responseBean);
                     }
 
                     @Override
@@ -62,7 +58,6 @@ public class HomeViewModel extends AndroidViewModel {
 
                     @Override
                     public void onComplete() {
-
                     }
                 });
     }

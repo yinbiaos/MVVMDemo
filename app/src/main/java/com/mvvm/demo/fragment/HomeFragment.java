@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.base.lib.Logs;
 import com.mvvm.demo.BaseFragment;
 import com.mvvm.demo.R;
+import com.mvvm.demo.entity.ArticleBean;
+import com.mvvm.demo.entity.ResponseBean;
 import com.mvvm.demo.viewmodel.HomeViewModel;
 
 import butterknife.BindView;
@@ -45,9 +47,9 @@ public class HomeFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         homeViewModel = new HomeViewModel(mContext.getApplication());
-        homeViewModel.getResult().observe(this, (String result) -> {
-            Logs.d(TAG, result);
+        homeViewModel.getResult().observe(this, (ResponseBean<ArticleBean> result) -> {
+            Logs.d(TAG, result.toString());
         });
-        homeViewModel.getArticle(0);
+        homeViewModel.getArticle(1);
     }
 }
