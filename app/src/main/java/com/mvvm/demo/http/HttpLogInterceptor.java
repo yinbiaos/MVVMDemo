@@ -51,13 +51,18 @@ public class HttpLogInterceptor implements Interceptor {
         // 我们需要创建出一个新的response给应用层处理
         ResponseBody body = response.body();
         if (body != null) {
-            ResponseBody responseBody = response.peekBody(body.contentLength());
+            Logs.d(TAG, "body.contentLength()=" + body.contentLength());
+            //这里body.contentLength()有可能为-1，需要特殊处理
+            ResponseBody rb = response.peekBody(body.contentLength() > 0 ? body.contentLength() : Integer.MAX_VALUE);
             Logs.i(TAG, String.format(Locale.getDefault(), "接收响应：%s  %n响应码：[%s]   %n返回json:%s  %.1fms",
-                    response.request().url(), response.code(), responseBody.string(), (t2 - t1) / 1e6d));
+                    response.request().url(),
+                    response.code(),
+                    rb.string(),
+                    (t2 - t1) / 1e6d));
         }
         if (!response.isSuccessful()) {
             Logs.d(TAG, "HttpException:" + response.code() + "：" + response.message());
-//            throw new HttpException(response.code(), response.message());
+//            throw new IOException(response.message());
         }
         return response;
     }

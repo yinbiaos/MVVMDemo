@@ -1,4 +1,4 @@
-package com.base.lib.log;
+package com.base.lib;
 
 import android.util.Log;
 
