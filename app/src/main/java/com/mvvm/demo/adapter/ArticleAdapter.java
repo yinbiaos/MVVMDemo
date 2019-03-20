@@ -61,8 +61,4 @@ public class ArticleAdapter extends CommonAdapter<ArticleListBean> {
         });
     }
 
-    public void addList(List<ArticleListBean> list) {
-        getDatas().addAll(list);
-        notifyDataSetChanged();
-    }
 }

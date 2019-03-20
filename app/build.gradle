@@ -49,5 +49,8 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     //Android 万能的Adapter for ListView,RecyclerView,GridView等，支持多种Item类型的情况。
     implementation 'com.zhy:base-rvadapter:3.0.3'
+    //SmartRefreshLayout下拉刷新上拉加载控件
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-19'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-19'
 
 }
