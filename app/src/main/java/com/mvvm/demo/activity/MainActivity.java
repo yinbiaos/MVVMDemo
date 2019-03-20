@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.mvvm.demo.adapter.ViewPagerAdapter;
 import com.mvvm.demo.BaseActivity;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.home.HomeFragment;
@@ -16,6 +15,7 @@ import com.mvvm.demo.activity.navigat.NavFragment;
 import com.mvvm.demo.activity.project.ProjectFragment;
 import com.mvvm.demo.activity.pubnum.PubFragment;
 import com.mvvm.demo.activity.system.SystemFragment;
+import com.mvvm.demo.adapter.ViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
