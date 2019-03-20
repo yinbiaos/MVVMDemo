@@ -1,4 +1,4 @@
-package com.mvvm.demo.fragment;
+package com.mvvm.demo.activity.navigat;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

@@ -1,4 +1,4 @@
-package com.mvvm.demo.fragment;
+package com.mvvm.demo.activity.project;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,15 +12,15 @@ import com.mvvm.demo.BaseFragment;
 import com.mvvm.demo.R;
 
 /**
- * 体系TAB
+ * 项目TAB
  *
  * @author yinbiao
  * @date 2019/3/8
  */
-public class SystemFragment extends BaseFragment {
+public class ProjectFragment extends BaseFragment {
 
     public static Fragment newInstance() {
-        return new SystemFragment();
+        return new ProjectFragment();
     }
 
     @Nullable

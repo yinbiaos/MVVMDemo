@@ -11,11 +11,11 @@ import android.view.MenuItem;
 import com.mvvm.demo.adapter.ViewPagerAdapter;
 import com.mvvm.demo.BaseActivity;
 import com.mvvm.demo.R;
-import com.mvvm.demo.fragment.HomeFragment;
-import com.mvvm.demo.fragment.NavFragment;
-import com.mvvm.demo.fragment.ProjectFragment;
-import com.mvvm.demo.fragment.PubFragment;
-import com.mvvm.demo.fragment.SystemFragment;
+import com.mvvm.demo.activity.home.HomeFragment;
+import com.mvvm.demo.activity.navigat.NavFragment;
+import com.mvvm.demo.activity.project.ProjectFragment;
+import com.mvvm.demo.activity.pubnum.PubFragment;
+import com.mvvm.demo.activity.system.SystemFragment;
 
 import java.util.ArrayList;
 import java.util.List;

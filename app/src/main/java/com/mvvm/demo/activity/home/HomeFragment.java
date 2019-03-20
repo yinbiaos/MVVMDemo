@@ -1,4 +1,4 @@
-package com.mvvm.demo.fragment;
+package com.mvvm.demo.activity.home;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,7 +15,6 @@ import com.mvvm.demo.R;
 import com.mvvm.demo.adapter.ArticleAdapter;
 import com.mvvm.demo.entity.ArticleBean;
 import com.mvvm.demo.entity.ResponseBean;
-import com.mvvm.demo.viewmodel.HomeViewModel;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;

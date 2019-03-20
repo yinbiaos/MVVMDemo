@@ -1,4 +1,4 @@
-package com.mvvm.demo.viewmodel;
+package com.mvvm.demo.activity.home;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;

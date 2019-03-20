@@ -5,8 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
-import com.mvvm.demo.fragment.LoadAnimFragment;
-
 /**
  * Activity页面数据加载动画基类
  *

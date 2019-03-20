@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
-import com.mvvm.demo.fragment.LoadAnimFragment;
-
 /**
  * Fragment页面数据加载动画基类
  *
