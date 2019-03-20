@@ -35,12 +35,16 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static final String TAG = "CrashHandler";
 
     private Map<String, Object> infos = new LinkedHashMap<>();
-    //系统默认的UncaughtException处理类
+    /**
+     * 系统默认的UncaughtException处理类
+     */
     private Thread.UncaughtExceptionHandler mDefaultHandler;
 
     private boolean isDebug = false;
     private Context context;
-    // 存储路径
+    /**
+     * 存储路径
+     */
     private String path;
 
     /**

@@ -3,6 +3,7 @@ package com.mvvm.demo.activity.home;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
 import com.base.lib.Logs;
@@ -12,7 +13,7 @@ import com.mvvm.demo.http.HttpManager;
 import com.mvvm.demo.http.HttpService;
 import com.mvvm.demo.http.RxSchedulers;
 
-import io.reactivex.observers.DefaultObserver;
+import io.reactivex.disposables.Disposable;
 
 /**
  * @author yinbiao
@@ -21,6 +22,7 @@ import io.reactivex.observers.DefaultObserver;
 public class HomeViewModel extends AndroidViewModel {
 
     private static final String TAG = "HomeViewModel";
+    private Disposable disposable;
 
     /**
      * 创建LiveData
@@ -36,6 +38,9 @@ public class HomeViewModel extends AndroidViewModel {
         super.onCleared();
         //页面销毁时调用
         Logs.d(TAG, "onCleared:");
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
     }
 
     public MutableLiveData<ResponseBean<ArticleBean>> getResult() {
@@ -43,22 +48,13 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     public void getArticle(int page) {
-        HttpManager.getInstance().getService(HttpService.class).getArticle(page)
+        disposable = HttpManager.getInstance().getService(HttpService.class).getArticle(page)
                 .compose(RxSchedulers.ioMain())
-                .subscribe(new DefaultObserver<ResponseBean<ArticleBean>>() {
-                    @Override
-                    public void onNext(ResponseBean<ArticleBean> responseBean) {
-                        result.setValue(responseBean);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Logs.e(TAG, e.toString() + "-----" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
+                .subscribe(responseBean -> {
+                    result.setValue(responseBean);
+                }, throwable -> {
+                    Logs.d(TAG, throwable.toString());
+                    result.setValue(null);
                 });
     }
 }

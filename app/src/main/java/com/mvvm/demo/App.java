@@ -21,9 +21,10 @@ import java.io.File;
  */
 public class App extends Application {
 
-    //文件路径
-    public static final String LOG_PATH =
-            Environment.getExternalStorageDirectory() + File.separator + BuildConfig.APPLICATION_ID + "/log/";
+    /**
+     * 日志文件存储路径
+     */
+    public static final String LOG_PATH = Environment.getExternalStorageDirectory() + File.separator + BuildConfig.APPLICATION_ID + "/log/";
 
     @Override
     public void onCreate() {

@@ -1,5 +1,6 @@
 package com.mvvm.demo.activity.home;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -74,7 +75,7 @@ public class HomeFragment extends BaseLoadAnimFragment {
     }
 
     private void initData() {
-        homeViewModel = new HomeViewModel(mContext.getApplication());
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         homeViewModel.getArticle(pageIndex);
         homeViewModel.getResult().observe(this, (ResponseBean<ArticleBean> result) -> {
             if (result == null) {
@@ -95,5 +96,6 @@ public class HomeFragment extends BaseLoadAnimFragment {
                 mRefreshLayout.finishRefresh();
             }
         });
+
     }
 }
