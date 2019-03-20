@@ -19,15 +19,11 @@ public class ToastUtil {
         if (TextUtils.isEmpty(msg)) {
             return;
         }
-        if (toast == null) {
-            toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
-            toast.show();
-        } else {
-            toast.setDuration(Toast.LENGTH_SHORT);
-            toast.setText(msg);
-            toast.show();
+        if (toast != null) {
+            toast.cancel();
         }
-
+        toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     public static void showToast(Context context, int resId) {

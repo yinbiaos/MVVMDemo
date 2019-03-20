@@ -7,7 +7,9 @@ import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
 import com.base.lib.Logs;
+import com.base.lib.ToastUtil;
 import com.mvvm.demo.entity.ArticleBean;
+import com.mvvm.demo.entity.ArticleListBean;
 import com.mvvm.demo.entity.ResponseBean;
 import com.mvvm.demo.http.HttpManager;
 import com.mvvm.demo.http.HttpService;
@@ -56,5 +58,10 @@ public class HomeViewModel extends AndroidViewModel {
                     Logs.d(TAG, throwable.toString());
                     result.setValue(null);
                 });
+    }
+
+    public void collect(ArticleListBean article) {
+        ToastUtil.showToast(getApplication(), "收藏：" + article.getTitle());
+        //TODO
     }
 }

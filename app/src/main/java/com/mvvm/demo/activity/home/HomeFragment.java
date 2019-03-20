@@ -58,7 +58,8 @@ public class HomeFragment extends BaseLoadAnimFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adapter = new ArticleAdapter(mContext, new ArrayList<>()));
+        recyclerView.setAdapter(adapter = new ArticleAdapter(mContext, new ArrayList<>(),
+                article -> homeViewModel.collect(article)));
         mRefreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {

@@ -3,6 +3,7 @@ package com.mvvm.demo.adapter;
 import android.content.Context;
 
 import com.mvvm.demo.R;
+import com.mvvm.demo.activity.home.OnCollectListener;
 import com.mvvm.demo.entity.ArticleListBean;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -17,9 +18,12 @@ import java.util.List;
  */
 public class ArticleAdapter extends CommonAdapter<ArticleListBean> {
 
+    private OnCollectListener onCollectListener;
 
-    public ArticleAdapter(Context context, List<ArticleListBean> datas) {
+
+    public ArticleAdapter(Context context, List<ArticleListBean> datas, OnCollectListener onCollectListener) {
         super(context, R.layout.item_article, datas);
+        this.onCollectListener = onCollectListener;
     }
 
     @Override
@@ -41,6 +45,7 @@ public class ArticleAdapter extends CommonAdapter<ArticleListBean> {
                 R.drawable.icon_unlike);
         //收藏和取消收藏
         holder.setOnClickListener(R.id.imv_like, v -> {
+            onCollectListener.onCollect(articleListBean);
 //                    if (!(boolean) SharedPreferencesUtil.getData(Constants.ISLOGIN, false)) {
 //                        ToastUtils.showShort("请先登录");
 //                        mContext.startActivity(new Intent(mContext, LoginActivity.class));
@@ -62,3 +67,4 @@ public class ArticleAdapter extends CommonAdapter<ArticleListBean> {
     }
 
 }
+
