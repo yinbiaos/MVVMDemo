@@ -1,40 +1,36 @@
-package com.mvvm.demo.activity.home;
+package com.mvvm.demo.activity.project.projectlist;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
 import com.base.lib.Logs;
-import com.base.lib.ToastUtil;
-import com.mvvm.demo.entity.ArticleBean;
-import com.mvvm.demo.entity.ArticleListBean;
+import com.mvvm.demo.entity.ProjectListBean;
 import com.mvvm.demo.entity.ResponseBean;
 import com.mvvm.demo.http.HttpManager;
 import com.mvvm.demo.http.HttpService;
 import com.mvvm.demo.http.RxSchedulers;
 
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DefaultObserver;
 
 /**
- * @author yinbiao
- * @date 2019/3/11
+ * Created by hzy on 2019/3/20
+ *
+ * @author hzy
  */
-public class HomeViewModel extends AndroidViewModel {
+public class ProjectListViewModel extends AndroidViewModel {
 
-    private static final String TAG = "HomeViewModel";
-    private Disposable disposable;
+    private static final String TAG = "ProjectListViewModel";
 
     /**
      * 创建LiveData
      */
-    private MutableLiveData<ResponseBean<ArticleBean>> result = new MutableLiveData<>();
+    private MutableLiveData<ResponseBean<ProjectListBean>> result = new MutableLiveData<>();
     private MutableLiveData<ResponseBean> collectResult = new MutableLiveData<>();
     private MutableLiveData<ResponseBean> UnCollectResult = new MutableLiveData<>();
 
-    public HomeViewModel(@NonNull Application application) {
+    public ProjectListViewModel(@NonNull Application application) {
         super(application);
     }
 
@@ -43,23 +39,31 @@ public class HomeViewModel extends AndroidViewModel {
         super.onCleared();
         //页面销毁时调用
         Logs.d(TAG, "onCleared:");
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
-        }
     }
 
-    public MutableLiveData<ResponseBean<ArticleBean>> getResult() {
+    public MutableLiveData<ResponseBean<ProjectListBean>> getResult() {
         return result;
     }
 
-    public void getArticle(int page) {
-        disposable = HttpManager.getInstance().getService(HttpService.class).getArticle(page)
+    public void getProjectList(int page, int cid) {
+        HttpManager.getInstance().getService(HttpService.class)
+                .getProjectList(page, cid)
                 .compose(RxSchedulers.ioMain())
-                .subscribe(responseBean -> {
-                    result.setValue(responseBean);
-                }, throwable -> {
-                    Logs.d(TAG, throwable.toString());
-                    result.setValue(null);
+                .subscribe(new DefaultObserver<ResponseBean<ProjectListBean>>() {
+                    @Override
+                    public void onNext(ResponseBean<ProjectListBean> responseBean) {
+                        result.setValue(responseBean);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logs.e(TAG, e.toString() + "-----" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
                 });
     }
 

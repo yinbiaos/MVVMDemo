@@ -1,10 +1,16 @@
 package com.mvvm.demo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.mvvm.demo.R;
-import com.mvvm.demo.activity.home.OnCollectListener;
+import com.mvvm.demo.activity.X5WebView;
+import com.mvvm.demo.activity.login.LoginActivity;
+import com.mvvm.demo.config.Constants;
+import com.mvvm.demo.listener.OnCollectListener;
 import com.mvvm.demo.entity.ArticleListBean;
+import com.mvvm.demo.utils.SharedPreferencesUtil;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -18,12 +24,15 @@ import java.util.List;
  */
 public class ArticleAdapter extends CommonAdapter<ArticleListBean> {
 
-    private OnCollectListener onCollectListener;
+    private OnCollectListener mOnCollectListener;
+
+    public void setmOnCollectListener(OnCollectListener mOnCollectListener) {
+        this.mOnCollectListener = mOnCollectListener;
+    }
 
 
-    public ArticleAdapter(Context context, List<ArticleListBean> datas, OnCollectListener onCollectListener) {
+    public ArticleAdapter(Context context, List<ArticleListBean> datas) {
         super(context, R.layout.item_article, datas);
-        this.onCollectListener = onCollectListener;
     }
 
     @Override
@@ -45,24 +54,19 @@ public class ArticleAdapter extends CommonAdapter<ArticleListBean> {
                 R.drawable.icon_unlike);
         //收藏和取消收藏
         holder.setOnClickListener(R.id.imv_like, v -> {
-            onCollectListener.onCollect(articleListBean);
-//                    if (!(boolean) SharedPreferencesUtil.getData(Constants.ISLOGIN, false)) {
-//                        ToastUtils.showShort("请先登录");
-//                        mContext.startActivity(new Intent(mContext, LoginActivity.class));
-//                        return;
-//                    }
-//                    if (articleListBean.isCollect()) {
-//                        mPresenter.unCollectArticle(articleListBean.getId(), position);
-//                    } else {
-//                        mPresenter.collectArticle(articleListBean.getId(), position);
-//                    }
+            if (!(boolean) SharedPreferencesUtil.getData(Constants.ISLOGIN, false)) {
+                ToastUtils.showShort("请先登录");
+                mContext.startActivity(new Intent(mContext, LoginActivity.class));
+                return;
+            }
+            mOnCollectListener.onCollect(articleListBean.isCollect(), articleListBean.getId(), position);
         });
         holder.setOnClickListener(R.id.tv_project, v -> {
-//            Intent intent = new Intent(mContext, X5WebView.class);
-//            intent.putExtra("mUrl",
-//                    Constants.BASE_URL + articleListBean.getTags().get(0).getUrl());
-//            intent.putExtra("mTitle", articleListBean.getTags().get(0).getName());
-//            mContext.startActivity(intent);
+            Intent intent = new Intent(mContext, X5WebView.class);
+            intent.putExtra("mUrl",
+                    Constants.BASE_URL + articleListBean.getTags().get(0).getUrl());
+            intent.putExtra("mTitle", articleListBean.getTags().get(0).getName());
+            mContext.startActivity(intent);
         });
     }
 

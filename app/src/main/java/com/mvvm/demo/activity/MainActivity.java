@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     private void initView() {
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(HomeFragment.newInstance());
-        fragments.add(ProjectFragment.newInstance());
+        fragments.add(ProjectFragment.getInstance());
         fragments.add(SystemFragment.newInstance());
         fragments.add(NavFragment.newInstance());
         fragments.add(PubFragment.newInstance());

@@ -7,13 +7,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.base.lib.IntentUtil;
-import com.base.lib.ToastUtil;
 import com.base.lib.Logs;
+import com.base.lib.ToastUtil;
 import com.mvvm.demo.App;
 import com.mvvm.demo.BaseActivity;
 import com.mvvm.demo.BuildConfig;
 import com.mvvm.demo.CrashHandler;
 import com.mvvm.demo.R;
+import com.mvvm.demo.config.Constants;
+import com.mvvm.demo.utils.SharedPreferencesUtil;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -33,7 +35,8 @@ public class SplashActivity extends BaseActivity {
     /**
      * 需要的权限集合
      */
-    String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE};
+    String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_PHONE_STATE};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,7 +53,8 @@ public class SplashActivity extends BaseActivity {
      * 申请权限
      */
     private void requestPermissions() {
-        disposable = new RxPermissions(this).requestEachCombined(permissions).subscribe(new Consumer<Permission>() {
+        disposable =
+                new RxPermissions(this).requestEachCombined(permissions).subscribe(new Consumer<Permission>() {
             @Override
             public void accept(@NonNull Permission permission) {
                 if (permission.granted) {
@@ -73,7 +77,8 @@ public class SplashActivity extends BaseActivity {
      */
     private void openLogSystem() {
         //初始化全局异常捕获
-        new CrashHandler().init(this.getApplicationContext(), BuildConfig.DEBUG, App.LOG_PATH + "crash.log");
+        new CrashHandler().init(this.getApplicationContext(), BuildConfig.DEBUG, App.LOG_PATH +
+                "crash.log");
         //初始化日志
         Logs.configure(BuildConfig.DEBUG, App.LOG_PATH + "log.temp");
     }
@@ -89,6 +94,7 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFinish() {
+                SharedPreferencesUtil.putData(Constants.ISLOGIN, false);
                 IntentUtil.startIntent(mContext, MainActivity.class);
                 finish();
             }

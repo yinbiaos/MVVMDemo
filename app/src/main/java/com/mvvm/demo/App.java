@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 
+import com.mvvm.demo.utils.SharedPreferencesUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshInitializer;
@@ -29,6 +30,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        SharedPreferencesUtil.getInstance(this, "WanAndroid");
         SmartRefreshLayout.setDefaultRefreshHeaderCreator((context, layout) -> new ClassicsHeader(context));
         SmartRefreshLayout.setDefaultRefreshFooterCreator(((context, layout) -> new ClassicsFooter(context)));
     }

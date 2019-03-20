@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.mvvm.demo.BaseLoadAnimFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.adapter.ArticleAdapter;
@@ -50,7 +51,8 @@ public class HomeFragment extends BaseLoadAnimFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -58,8 +60,7 @@ public class HomeFragment extends BaseLoadAnimFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adapter = new ArticleAdapter(mContext, new ArrayList<>(),
-                article -> homeViewModel.collect(article)));
+        recyclerView.setAdapter(adapter = new ArticleAdapter(mContext, new ArrayList<>()));
         mRefreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
@@ -69,6 +70,31 @@ public class HomeFragment extends BaseLoadAnimFragment {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 homeViewModel.getArticle(pageIndex = 0);
+            }
+        });
+        adapter.setmOnCollectListener((collect, id, position) -> {
+            if (collect) {
+                homeViewModel.collectArticle(id);
+                homeViewModel.getCollectResult().observe(getActivity(),
+                        (ResponseBean responseBean) -> {
+                            if (responseBean.getErrorCode() != 0) {
+                                return;
+                            }
+                            ToastUtils.showShort("收藏成功");
+                            adapter.getDatas().get(position).setCollect(true);
+                            adapter.notifyItemChanged(position);
+                        });
+            } else {
+                homeViewModel.unCollectArticle(id);
+                homeViewModel.getUnCollectResult().observe(getActivity(),
+                        (ResponseBean responseBean) -> {
+                            if (responseBean == null) {
+                                return;
+                            }
+                            ToastUtils.showShort("取消收藏成功");
+                            adapter.getDatas().get(position).setCollect(false);
+                            adapter.notifyItemChanged(position);
+                        });
             }
         });
         startLoading(R.id.content);

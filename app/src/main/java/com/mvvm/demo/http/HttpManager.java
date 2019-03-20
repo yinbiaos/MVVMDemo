@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class HttpManager {
 
-    public static final String BASE_URL = "http://www.wanandroid.com";
+    public static final String BASE_URL = "https://www.wanandroid.com";
 
     /**
      * HttpManager 实例
