@@ -52,7 +52,9 @@ public class ProjectListAdapter extends CommonAdapter<ProjectListBean.DatasBean>
                         mContext.startActivity(new Intent(mContext, LoginActivity.class));
                         return;
                     }
-                    mOnCollectListener.onCollect(bean.isCollect(), bean.getId(), position);
+                    if (mOnCollectListener != null) {
+                        mOnCollectListener.onCollect(bean.isCollect(), bean.getId(), position);
+                    }
                 });
     }
 }

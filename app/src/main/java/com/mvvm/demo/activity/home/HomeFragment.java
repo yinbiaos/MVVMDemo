@@ -51,7 +51,8 @@ public class HomeFragment extends BaseLoadAnimFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -73,17 +74,6 @@ public class HomeFragment extends BaseLoadAnimFragment {
         });
         adapter.setmOnCollectListener((collect, id, position) -> {
             if (collect) {
-                homeViewModel.collectArticle(id);
-                homeViewModel.getCollectResult().observe(this,
-                        (ResponseBean responseBean) -> {
-                            if (responseBean == null || responseBean.getErrorCode() != 0) {
-                                return;
-                            }
-                            ToastUtil.showToast(mContext, "收藏成功");
-                            adapter.getDatas().get(position).setCollect(true);
-                            adapter.notifyItemChanged(position);
-                        });
-            } else {
                 homeViewModel.unCollectArticle(id);
                 homeViewModel.getUnCollectResult().observe(this,
                         (ResponseBean responseBean) -> {
@@ -92,6 +82,17 @@ public class HomeFragment extends BaseLoadAnimFragment {
                             }
                             ToastUtil.showToast(mContext, "取消收藏成功");
                             adapter.getDatas().get(position).setCollect(false);
+                            adapter.notifyItemChanged(position);
+                        });
+            } else {
+                homeViewModel.collectArticle(id);
+                homeViewModel.getCollectResult().observe(this,
+                        (ResponseBean responseBean) -> {
+                            if (responseBean == null || responseBean.getErrorCode() != 0) {
+                                return;
+                            }
+                            ToastUtil.showToast(mContext, "收藏成功");
+                            adapter.getDatas().get(position).setCollect(true);
                             adapter.notifyItemChanged(position);
                         });
             }
