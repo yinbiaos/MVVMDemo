@@ -77,7 +77,7 @@ public class ProjectFragment extends BaseLoadAnimFragment {
 //            intent.putExtra("titleList", (Serializable) titleList);
 //            getActivity().startActivityForResult(intent, REQ_CODE);
         });
-        startLoading(R.id.content);
+        startLoading(R.id.vp_pub);
         viewModel = ViewModelProviders.of(this).get(ProjectViewModel.class);
         viewModel.getProjectList();
         viewModel.getResult().observe(this, (ResponseBean<List<ProjectBean>> result) -> {

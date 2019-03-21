@@ -3,13 +3,13 @@ package com.mvvm.demo.adapter;
 import android.content.Context;
 import android.content.Intent;
 
-import com.blankj.utilcode.util.ToastUtils;
+import com.base.lib.SharedHelper;
+import com.base.lib.ToastUtil;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.login.LoginActivity;
 import com.mvvm.demo.config.Constants;
 import com.mvvm.demo.entity.ProjectListBean;
 import com.mvvm.demo.listener.OnCollectListener;
-import com.mvvm.demo.utils.SharedPreferencesUtil;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -47,8 +47,8 @@ public class ProjectListAdapter extends CommonAdapter<ProjectListBean.DatasBean>
                 .setImageResource(R.id.imv_like, bean.isCollect() ? R.drawable.icon_like :
                         R.drawable.icon_unlike)
                 .setOnClickListener(R.id.imv_like, v -> {
-                    if (!(boolean) SharedPreferencesUtil.getData(Constants.ISLOGIN, false)) {
-                        ToastUtils.showShort("请先登录");
+                    if (!SharedHelper.getInstance().getBoolean(Constants.ISLOGIN, false)) {
+                        ToastUtil.showToast(mContext, "请先登录");
                         mContext.startActivity(new Intent(mContext, LoginActivity.class));
                         return;
                     }

@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.blankj.utilcode.util.ToastUtils;
+import com.base.lib.ToastUtil;
 import com.mvvm.demo.BaseLoadAnimFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.adapter.ArticleAdapter;
@@ -51,8 +51,7 @@ public class HomeFragment extends BaseLoadAnimFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -75,23 +74,23 @@ public class HomeFragment extends BaseLoadAnimFragment {
         adapter.setmOnCollectListener((collect, id, position) -> {
             if (collect) {
                 homeViewModel.collectArticle(id);
-                homeViewModel.getCollectResult().observe(getActivity(),
+                homeViewModel.getCollectResult().observe(this,
                         (ResponseBean responseBean) -> {
-                            if (responseBean.getErrorCode() != 0) {
+                            if (responseBean == null || responseBean.getErrorCode() != 0) {
                                 return;
                             }
-                            ToastUtils.showShort("收藏成功");
+                            ToastUtil.showToast(mContext, "收藏成功");
                             adapter.getDatas().get(position).setCollect(true);
                             adapter.notifyItemChanged(position);
                         });
             } else {
                 homeViewModel.unCollectArticle(id);
-                homeViewModel.getUnCollectResult().observe(getActivity(),
+                homeViewModel.getUnCollectResult().observe(this,
                         (ResponseBean responseBean) -> {
                             if (responseBean == null) {
                                 return;
                             }
-                            ToastUtils.showShort("取消收藏成功");
+                            ToastUtil.showToast(mContext, "取消收藏成功");
                             adapter.getDatas().get(position).setCollect(false);
                             adapter.notifyItemChanged(position);
                         });

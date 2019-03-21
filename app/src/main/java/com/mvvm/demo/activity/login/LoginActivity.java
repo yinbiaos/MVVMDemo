@@ -9,7 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.blankj.utilcode.util.ToastUtils;
+import com.base.lib.SharedHelper;
+import com.base.lib.ToastUtil;
 import com.mvvm.demo.BaseActivity;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.MainActivity;
@@ -17,7 +18,6 @@ import com.mvvm.demo.activity.register.RegisterActivity;
 import com.mvvm.demo.config.Constants;
 import com.mvvm.demo.entity.LoginBean;
 import com.mvvm.demo.entity.ResponseBean;
-import com.mvvm.demo.utils.SharedPreferencesUtil;
 import com.mvvm.demo.widget.TitleBarLayout;
 
 import butterknife.BindView;
@@ -69,8 +69,8 @@ public class LoginActivity extends BaseActivity {
             mEtUsername.setText(username);
             mEtPassword.setText(password);
         }
-        viewModel=ViewModelProviders.of(this).get(LoginViewModel.class);
-        mTitleBar.setTitleBarBgColor(getResources().getColor(R.color.c_6c8cff));
+        viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        mTitleBar.setTitleBarBackgroundColor(getResources().getColor(R.color.c_6c8cff));
         mTitleBar.setTitleColor(getResources().getColor(R.color.c_ffffff));
         mTitleBar.setTitle("登录");
     }
@@ -107,9 +107,9 @@ public class LoginActivity extends BaseActivity {
         username = mEtUsername.getText().toString().trim();
         password = mEtPassword.getText().toString().trim();
         if (TextUtils.isEmpty(username)) {
-            ToastUtils.showShort("请输入用户名");
+            ToastUtil.showToast(mContext, "请输入用户名");
         } else if (TextUtils.isEmpty(password)) {
-            ToastUtils.showShort("请输入登录密码");
+            ToastUtil.showToast(mContext, "请输入登录密码");
         } else {
             viewModel.postLogin(username, password);
             viewModel.getResult().observe(this, (ResponseBean<LoginBean> responseBean) -> {
@@ -117,14 +117,14 @@ public class LoginActivity extends BaseActivity {
                     return;
                 }
                 if (responseBean.getErrorCode() == 0) {
-                    ToastUtils.showShort("登录成功");
+                    ToastUtil.showToast(mContext, "登录成功");
                     LoginBean loginBean = (LoginBean) responseBean.getData();
-                    SharedPreferencesUtil.putData(Constants.USERNAME, loginBean.getUsername());
-                    SharedPreferencesUtil.putData(Constants.ISLOGIN, true);
+                    SharedHelper.getInstance().put(Constants.USERNAME, loginBean.getUsername());
+                    SharedHelper.getInstance().put(Constants.ISLOGIN, true);
                     startActivity(new Intent(this, MainActivity.class));
                     finish();
                 } else {
-                    ToastUtils.showShort(responseBean.getErrorMsg());
+                    ToastUtil.showToast(mContext, responseBean.getErrorMsg());
                 }
             });
         }

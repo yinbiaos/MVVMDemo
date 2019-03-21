@@ -1,7 +1,9 @@
 package com.base.lib;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.TextUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -22,7 +24,8 @@ public class ToastUtil {
         if (toast != null) {
             toast.cancel();
         }
-        toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+        toast = Toast.makeText(context.getApplicationContext(), msg, Toast.LENGTH_SHORT);
+        toast.setText(msg);
         toast.show();
     }
 
