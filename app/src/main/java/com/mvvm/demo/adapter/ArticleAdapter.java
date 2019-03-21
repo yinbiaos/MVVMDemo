@@ -36,35 +36,35 @@ public class ArticleAdapter extends CommonAdapter<ArticleListBean> {
     }
 
     @Override
-    protected void convert(ViewHolder holder, ArticleListBean articleListBean, int position) {
+    protected void convert(ViewHolder holder, ArticleListBean bean, int position) {
         boolean isNewest =
-                articleListBean.getNiceDate().contains("小时") || articleListBean.getNiceDate().contains("分钟");
-        holder.setText(R.id.tv_author, "作者：" + articleListBean.getAuthor());
+                bean.getNiceDate().contains("小时") || bean.getNiceDate().contains("分钟");
+        holder.setText(R.id.tv_author, "作者：" + bean.getAuthor());
         holder.setText(R.id.tv_chapterName,
-                "分类:" + articleListBean.getChapterName());
-        holder.setText(R.id.tv_title, articleListBean.getTitle()
+                "分类:" + bean.getChapterName());
+        holder.setText(R.id.tv_title, bean.getTitle()
                 .replaceAll("&ldquo;", "\"")
                 .replaceAll("&rdquo;", "\"")
                 .replaceAll("&mdash;", "—"));
         holder.setVisible(R.id.tv_new, isNewest);
-        holder.setText(R.id.tv_project, articleListBean.getSuperChapterName());
-        holder.setText(R.id.tv_time, "时间：" + articleListBean.getNiceDate());
-        holder.setImageResource(R.id.imv_like, articleListBean.isCollect() ?
+        holder.setText(R.id.tv_project, bean.getSuperChapterName());
+        holder.setText(R.id.tv_time, "时间：" + bean.getNiceDate());
+        holder.setImageResource(R.id.imv_like, bean.isCollect() ?
                 R.drawable.icon_like : R.drawable.icon_unlike);
         //收藏和取消收藏
         holder.setOnClickListener(R.id.imv_like, v -> {
-            if (!(boolean) SharedHelper.getInstance().getBoolean(Constants.ISLOGIN, false)) {
+            if (!SharedHelper.getInstance().getBoolean(Constants.ISLOGIN, false)) {
                 ToastUtil.showToast(mContext, "请先登录");
                 mContext.startActivity(new Intent(mContext, LoginActivity.class));
                 return;
             }
-            mOnCollectListener.onCollect(articleListBean.isCollect(), articleListBean.getId(), position);
+            mOnCollectListener.onCollect(bean.isCollect(), bean.getId(), position);
         });
         holder.setOnClickListener(R.id.tv_project, v -> {
             Intent intent = new Intent(mContext, X5WebView.class);
             intent.putExtra("mUrl",
-                    Constants.BASE_URL + articleListBean.getTags().get(0).getUrl());
-            intent.putExtra("mTitle", articleListBean.getTags().get(0).getName());
+                    Constants.BASE_URL + bean.getTags().get(0).getUrl());
+            intent.putExtra("mTitle", bean.getTags().get(0).getName());
             mContext.startActivity(intent);
         });
     }

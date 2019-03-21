@@ -61,7 +61,8 @@ public class ProjectListFragment extends BaseLoadAnimFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
@@ -97,19 +98,7 @@ public class ProjectListFragment extends BaseLoadAnimFragment {
             }
         });
         mAdapter.setmOnCollectListener((collect, id, position) -> {
-//            startLoading(R.id.content);
             if (collect) {
-                viewModel.collectArticle(id);
-                viewModel.getCollectResult().observe(this,
-                        (ResponseBean responseBean) -> {
-                            if (responseBean.getErrorCode() != 0) {
-                                return;
-                            }
-                            ToastUtil.showToast(mContext, "收藏成功");
-                            projectList.get(position).setCollect(true);
-                            mAdapter.notifyItemChanged(position);
-                        });
-            } else {
                 viewModel.unCollectArticle(id);
                 viewModel.getUnCollectResult().observe(this,
                         (ResponseBean responseBean) -> {
@@ -118,6 +107,17 @@ public class ProjectListFragment extends BaseLoadAnimFragment {
                             }
                             ToastUtil.showToast(mContext, "取消收藏成功");
                             projectList.get(position).setCollect(false);
+                            mAdapter.notifyItemChanged(position);
+                        });
+            } else {
+                viewModel.collectArticle(id);
+                viewModel.getCollectResult().observe(this,
+                        (ResponseBean responseBean) -> {
+                            if (responseBean.getErrorCode() != 0) {
+                                return;
+                            }
+                            ToastUtil.showToast(mContext, "收藏成功");
+                            projectList.get(position).setCollect(true);
                             mAdapter.notifyItemChanged(position);
                         });
             }

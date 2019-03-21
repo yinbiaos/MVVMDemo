@@ -60,4 +60,6 @@ dependencies {
 //    implementation 'com.github.bumptech.glide:glide:4.8.0'
 //    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
+    implementation files('libs/tbs_sdk_thirdapp_v3.6.0.1310_43612_sharewithdownload_withoutGame_obfs_20180706_163319.jar')
+
 }
