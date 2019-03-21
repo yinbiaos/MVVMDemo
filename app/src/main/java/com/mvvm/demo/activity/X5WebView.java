@@ -48,7 +48,7 @@ public class X5WebView extends BaseActivity {
     protected void initView() {
         mUrl = getIntent().getStringExtra("mUrl");
         mTitle = getIntent().getStringExtra("mTitle");
-        mTitleBar.setTitleBarBgColor(getResources().getColor(R.color.c_6c8cff));
+        mTitleBar.setTitleBarBackgroundColor(getResources().getColor(R.color.c_6c8cff));
         mTitleBar.setTitleColor(getResources().getColor(R.color.c_ffffff));
         mTitleBar.setTitle(mTitle);
         mTitleBar.setLeftBack(v -> finish());

@@ -51,7 +51,7 @@ public class RegisterActivity extends BaseActivity {
 
 
     protected void initViewAndData() {
-        mTitleBar.setTitleBarBgColor(getResources().getColor(R.color.c_6c8cff));
+        mTitleBar.setTitleBarBackgroundColor(getResources().getColor(R.color.c_6c8cff));
         mTitleBar.setTitleColor(getResources().getColor(R.color.c_ffffff));
         mTitleBar.setTitle("注册");
     }

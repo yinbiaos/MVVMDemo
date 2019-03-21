@@ -19,7 +19,7 @@ import com.mvvm.demo.R;
  * @author hzy
  */
 public class TitleBarLayout extends LinearLayout {
-    RelativeLayout rlActionbar;
+    RelativeLayout titleBar;
     ImageView ivLeft;
     TextView tvLeft;
     TextView tvCenter;
@@ -49,7 +49,7 @@ public class TitleBarLayout extends LinearLayout {
     private void init() {
         inflate(getContext(), R.layout.view_title_bar, this);
 
-        rlActionbar = findViewById(R.id.rl_actionbar);
+        titleBar = findViewById(R.id.rl_actionbar);
         ivLeft = findViewById(R.id.iv_left);
         tvLeft = findViewById(R.id.tv_left);
         tvCenter = findViewById(R.id.tv_center);
@@ -61,12 +61,16 @@ public class TitleBarLayout extends LinearLayout {
     /**
      * 设置背景色
      */
-    public void setTitleBarBgColor(@ColorInt int color) {
-        rlActionbar.setBackgroundColor(color);
+    public void setTitleBarBackgroundColor(@ColorInt int color) {
+        titleBar.setBackgroundColor(color);
     }
 
-    public void setTitleBarBgDrawable(Drawable drawable) {
-        rlActionbar.setBackground(drawable);
+    public void setTitleBarBackground(Drawable drawable) {
+        if (Build.VERSION.SDK_INT >= 16) {
+            titleBar.setBackground(drawable);
+        } else {
+            titleBar.setBackgroundDrawable(drawable);
+        }
     }
 
     /**
