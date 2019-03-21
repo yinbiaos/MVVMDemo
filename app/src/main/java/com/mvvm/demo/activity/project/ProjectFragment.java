@@ -15,11 +15,13 @@ import android.widget.ImageView;
 
 import com.mvvm.demo.BaseLoadAnimFragment;
 import com.mvvm.demo.R;
+import com.mvvm.demo.activity.PubActivity;
 import com.mvvm.demo.activity.project.projectlist.ProjectListFragment;
 import com.mvvm.demo.adapter.ViewPagerAdapter;
 import com.mvvm.demo.entity.ProjectBean;
 import com.mvvm.demo.entity.ResponseBean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,10 +74,10 @@ public class ProjectFragment extends BaseLoadAnimFragment {
 
     private void initEventAndData() {
         mImvMore.setOnClickListener(v -> {
-//            Intent intent = new Intent(getActivity(), PubActivity.class);
-//            intent.putExtra("title", "项目列表");
-//            intent.putExtra("titleList", (Serializable) titleList);
-//            getActivity().startActivityForResult(intent, REQ_CODE);
+            Intent intent = new Intent(getActivity(), PubActivity.class);
+            intent.putExtra("title", "项目列表");
+            intent.putExtra("titleList", (Serializable) titleList);
+            getActivity().startActivityForResult(intent, REQ_CODE);
         });
 //        startLoading(R.id.vp_pub);
         viewModel = ViewModelProviders.of(this).get(ProjectViewModel.class);

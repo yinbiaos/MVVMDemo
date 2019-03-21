@@ -3,6 +3,7 @@ package com.mvvm.demo.adapter;
 import android.content.Context;
 import android.content.Intent;
 
+import com.base.lib.ImageLoaderUtil;
 import com.base.lib.SharedHelper;
 import com.base.lib.ToastUtil;
 import com.mvvm.demo.R;
@@ -38,8 +39,8 @@ public class ProjectListAdapter extends CommonAdapter<ProjectListBean.DatasBean>
 
     @Override
     protected void convert(ViewHolder holder, ProjectListBean.DatasBean bean, int position) {
-//        ImageLoaderUtil.LoadImage(mContext, bean.getEnvelopePic(),
-//                holder.getView(R.id.imv_project));
+        ImageLoaderUtil.LoadImage(mContext, bean.getEnvelopePic(),
+                holder.getView(R.id.imv_project));
         holder.setText(R.id.tv_project_name, bean.getTitle())
                 .setText(R.id.tv_project_content, bean.getDesc())
                 .setText(R.id.tv_time, bean.getNiceDate())
