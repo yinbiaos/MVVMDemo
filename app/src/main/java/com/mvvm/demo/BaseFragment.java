@@ -8,8 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import com.blankj.utilcode.util.BarUtils;
-
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -35,8 +33,6 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //View注解框架绑定
         unbinder = ButterKnife.bind(this, view);
-        BarUtils.setStatusBarVisibility(getActivity(), true);
-        BarUtils.setStatusBarColor(getActivity(), getResources().getColor(R.color.c_6c8cff), 1);
     }
 
     @Override

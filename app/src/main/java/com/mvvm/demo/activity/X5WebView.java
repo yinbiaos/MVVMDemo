@@ -10,7 +10,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.blankj.utilcode.util.BarUtils;
 import com.mvvm.demo.BaseActivity;
 import com.mvvm.demo.R;
 import com.mvvm.demo.widget.TitleBarLayout;
@@ -49,8 +48,6 @@ public class X5WebView extends BaseActivity {
     protected void initView() {
         mUrl = getIntent().getStringExtra("mUrl");
         mTitle = getIntent().getStringExtra("mTitle");
-        BarUtils.setStatusBarVisibility(this, true);
-        BarUtils.setStatusBarColor(this, getResources().getColor(R.color.c_6c8cff), 1);
         mTitleBar.setTitleBarBgColor(getResources().getColor(R.color.c_6c8cff));
         mTitleBar.setTitleColor(getResources().getColor(R.color.c_ffffff));
         mTitleBar.setTitle(mTitle);

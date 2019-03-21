@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.blankj.utilcode.util.BarUtils;
-
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -30,8 +28,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         mContext = this;
         //View注解框架绑定
         unbinder = ButterKnife.bind(this);
-        BarUtils.setStatusBarVisibility(this, true);
-        BarUtils.setStatusBarColor(this, getResources().getColor(R.color.c_6c8cff), 1);
     }
 
     /**

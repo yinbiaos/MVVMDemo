@@ -44,7 +44,7 @@ public class SharedHelper {
         sp = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
     }
 
-    public void putString(String key, String value) {
+    public void put(String key, String value) {
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(key, value);
         editor.apply();
@@ -54,7 +54,7 @@ public class SharedHelper {
         return sp.getString(key, defaultValue);
     }
 
-    public void putInt(String key, int value) {
+    public void put(String key, int value) {
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(key, value);
         editor.apply();
@@ -64,7 +64,7 @@ public class SharedHelper {
         return sp.getInt(key, defaultValue);
     }
 
-    public void putLong(String key, long value) {
+    public void put(String key, long value) {
         SharedPreferences.Editor editor = sp.edit();
         editor.putLong(key, value);
         editor.apply();
@@ -74,7 +74,7 @@ public class SharedHelper {
         return sp.getLong(key, defaultValue);
     }
 
-    public void putFloat(String key, float value) {
+    public void put(String key, float value) {
         SharedPreferences.Editor editor = sp.edit();
         editor.putFloat(key, value);
         editor.apply();
@@ -84,7 +84,7 @@ public class SharedHelper {
         return sp.getFloat(key, defaultValue);
     }
 
-    public void putBoolean(String key, boolean value) {
+    public void put(String key, boolean value) {
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean(key, value);
         editor.apply();
