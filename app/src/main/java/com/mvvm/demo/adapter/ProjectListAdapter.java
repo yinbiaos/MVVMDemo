@@ -33,7 +33,7 @@ public class ProjectListAdapter extends CommonAdapter<ProjectListBean.DatasBean>
     public ProjectListAdapter(Context context,
                               List<ProjectListBean.DatasBean> datas) {
         super(context, R.layout.item_project_list, datas);
-        mContext=context;
+        mContext = context;
     }
 
     @Override
@@ -52,7 +52,9 @@ public class ProjectListAdapter extends CommonAdapter<ProjectListBean.DatasBean>
                         mContext.startActivity(new Intent(mContext, LoginActivity.class));
                         return;
                     }
-                    mOnCollectListener.onCollect(bean.isCollect(), bean.getId(), position);
+                    if (mOnCollectListener != null) {
+                        mOnCollectListener.onCollect(bean.isCollect(), bean.getId(), position);
+                    }
                 });
     }
 }
