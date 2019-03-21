@@ -25,13 +25,13 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation files('libs/android-logging-log4j-1.0.3.jar')
-    implementation files('libs/eventbus-3.1.1.jar')
-    implementation files('libs/glide-full-4.7.0.jar')
-    implementation files('libs/log4j-1.2.17.jar')
-    implementation 'com.google.code.gson:gson:2.8.5'
+    api files('libs/android-logging-log4j-1.0.3.jar')
+    api files('libs/eventbus-3.1.1.jar')
+    api files('libs/glide-full-4.7.0.jar')
+    api files('libs/log4j-1.2.17.jar')
+    api 'com.google.code.gson:gson:2.8.5'
 }
