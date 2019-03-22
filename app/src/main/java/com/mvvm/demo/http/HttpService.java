@@ -2,11 +2,13 @@ package com.mvvm.demo.http;
 
 import com.mvvm.demo.entity.ArticleBean;
 import com.mvvm.demo.entity.HomeBanner;
+import com.mvvm.demo.entity.KnowledgeSystem;
 import com.mvvm.demo.entity.LoginBean;
 import com.mvvm.demo.entity.NaviBean;
 import com.mvvm.demo.entity.ProjectBean;
 import com.mvvm.demo.entity.ProjectListBean;
 import com.mvvm.demo.entity.ResponseBean;
+import com.mvvm.demo.entity.SystemDataBean;
 
 import java.util.List;
 
@@ -41,6 +43,27 @@ public interface HttpService {
     Observable<ResponseBean<List<HomeBanner>>> getBannerList();
 
     //############################导航##############################################################
+
+    //############################知识体系###########################################################
+
+    /**
+     * 2.1 体系数据
+     *
+     * @return
+     */
+    @GET("/tree/json")
+    Observable<ResponseBean<List<SystemDataBean>>> getSystemData();
+
+    /**
+     * 2.2 知识体系下的文章
+     *
+     * @param cid
+     * @param page
+     * @return
+     */
+    @GET("/article/list/{page}/json")
+    Observable<ResponseBean<KnowledgeSystem>> getsubSystem(@Path("page") int page, @Query(
+            "cid") int cid);
 
     /**
      * 3.1 导航数据

@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(HomeFragment.newInstance());
         fragments.add(ProjectFragment.getInstance());
-        fragments.add(SystemFragment.newInstance());
+        fragments.add(SystemFragment.getInstance());
         fragments.add(NaviFragment.getInstance());
         fragments.add(PubFragment.newInstance());
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragments));

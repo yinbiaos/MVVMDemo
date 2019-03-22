@@ -1,13 +1,16 @@
-package com.mvvm.demo.activity.navigat;
+package com.mvvm.demo.activity.system;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.base.lib.Logs;
+import com.mvvm.demo.App;
 import com.mvvm.demo.entity.NaviBean;
 import com.mvvm.demo.entity.ResponseBean;
+import com.mvvm.demo.entity.SystemDataBean;
 import com.mvvm.demo.http.HttpManager;
 import com.mvvm.demo.http.HttpService;
 import com.mvvm.demo.http.RxSchedulers;
@@ -20,17 +23,17 @@ import io.reactivex.disposables.CompositeDisposable;
  * @author yinbiao
  * @date 2019/3/11
  */
-public class NaviViewModel extends AndroidViewModel {
+public class SystemViewModel extends AndroidViewModel {
 
-    private static final String TAG = "NaviViewModel";
+    private static final String TAG = "SystemViewModel";
     CompositeDisposable disposable;
 
     /**
      * 创建LiveData
      */
-    private MutableLiveData<ResponseBean<List<NaviBean>>> result = new MutableLiveData<>();
+    private MutableLiveData<ResponseBean<List<SystemDataBean>>> result = new MutableLiveData<>();
 
-    public NaviViewModel(@NonNull Application application) {
+    public SystemViewModel(@NonNull Application application) {
         super(application);
         disposable = new CompositeDisposable();
     }
@@ -43,12 +46,13 @@ public class NaviViewModel extends AndroidViewModel {
         disposable.clear();
     }
 
-    public MutableLiveData<ResponseBean<List<NaviBean>>> getResult() {
+    public MutableLiveData<ResponseBean<List<SystemDataBean>>> getResult() {
         return result;
     }
 
-    public void getNavi() {
-        disposable.add(HttpManager.getInstance().getService(HttpService.class).getNaviData()
+    public void getData() {
+        disposable.add(HttpManager.getInstance().getService(HttpService.class)
+                .getSystemData()
                 .compose(RxSchedulers.ioMain())
                 .subscribe(listResponseBean -> {
                     result.setValue(listResponseBean);
