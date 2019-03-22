@@ -15,7 +15,6 @@ import com.mvvm.demo.http.RxSchedulers;
 import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DefaultObserver;
 
 /**
  * Created by hzy on 2019/3/20
