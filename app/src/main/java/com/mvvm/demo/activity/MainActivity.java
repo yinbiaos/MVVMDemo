@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import com.mvvm.demo.BaseActivity;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.home.HomeFragment;
-import com.mvvm.demo.activity.navigat.NavFragment;
+import com.mvvm.demo.activity.navigat.NaviFragment;
 import com.mvvm.demo.activity.project.ProjectFragment;
 import com.mvvm.demo.activity.pubnum.PubFragment;
 import com.mvvm.demo.activity.system.SystemFragment;
@@ -57,7 +57,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         fragments.add(HomeFragment.newInstance());
         fragments.add(ProjectFragment.getInstance());
         fragments.add(SystemFragment.newInstance());
-        fragments.add(NavFragment.newInstance());
+        fragments.add(NaviFragment.getInstance());
         fragments.add(PubFragment.newInstance());
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragments));
         viewPager.setOffscreenPageLimit(fragments.size());

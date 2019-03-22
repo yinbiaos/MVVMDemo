@@ -3,6 +3,7 @@ package com.mvvm.demo.http;
 import com.mvvm.demo.entity.ArticleBean;
 import com.mvvm.demo.entity.HomeBanner;
 import com.mvvm.demo.entity.LoginBean;
+import com.mvvm.demo.entity.NaviBean;
 import com.mvvm.demo.entity.ProjectBean;
 import com.mvvm.demo.entity.ProjectListBean;
 import com.mvvm.demo.entity.ResponseBean;
@@ -38,6 +39,16 @@ public interface HttpService {
      */
     @GET("/banner/json")
     Observable<ResponseBean<List<HomeBanner>>> getBannerList();
+
+    //############################导航##############################################################
+
+    /**
+     * 3.1 导航数据
+     *
+     * @return
+     */
+    @GET("/navi/json")
+    Observable<ResponseBean<List<NaviBean>>> getNaviData();
 
     //############################项目##############################################################
 
