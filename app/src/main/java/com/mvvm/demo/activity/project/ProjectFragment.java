@@ -84,11 +84,13 @@ public class ProjectFragment extends BaseLoadAnimFragment {
         viewModel.getProjectList();
         viewModel.getResult().observe(this, (ResponseBean<List<ProjectBean>> result) -> {
 //            done();
-            List<ProjectBean> projectList=result.getData();
+            List<ProjectBean> projectList = result.getData();
             if (result == null) {
                 return;
             }
-            if (null != titleList) {titleList.clear();}
+            if (null != titleList) {
+                titleList.clear();
+            }
             for (ProjectBean pb : projectList) {
                 Fragment fragment = null;
                 titleList.add(pb.getName());

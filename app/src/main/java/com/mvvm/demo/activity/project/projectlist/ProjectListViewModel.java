@@ -12,7 +12,7 @@ import com.mvvm.demo.http.HttpManager;
 import com.mvvm.demo.http.HttpService;
 import com.mvvm.demo.http.RxSchedulers;
 
-import io.reactivex.observers.DefaultObserver;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Created by hzy on 2019/3/20
@@ -23,15 +23,18 @@ public class ProjectListViewModel extends AndroidViewModel {
 
     private static final String TAG = "ProjectListViewModel";
 
+    CompositeDisposable disposable;
+
     /**
      * 创建LiveData
      */
     private MutableLiveData<ResponseBean<ProjectListBean>> result = new MutableLiveData<>();
     private MutableLiveData<ResponseBean> collectResult = new MutableLiveData<>();
-    private MutableLiveData<ResponseBean> UnCollectResult = new MutableLiveData<>();
+    private MutableLiveData<ResponseBean> unCollectResult = new MutableLiveData<>();
 
     public ProjectListViewModel(@NonNull Application application) {
         super(application);
+        disposable = new CompositeDisposable();
     }
 
     @Override
@@ -39,6 +42,7 @@ public class ProjectListViewModel extends AndroidViewModel {
         super.onCleared();
         //页面销毁时调用
         Logs.d(TAG, "onCleared:");
+        disposable.clear();
     }
 
     public MutableLiveData<ResponseBean<ProjectListBean>> getResult() {
@@ -46,25 +50,14 @@ public class ProjectListViewModel extends AndroidViewModel {
     }
 
     public void getProjectList(int page, int cid) {
-        HttpManager.getInstance().getService(HttpService.class)
+        disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .getProjectList(page, cid)
                 .compose(RxSchedulers.ioMain())
-                .subscribe(new DefaultObserver<ResponseBean<ProjectListBean>>() {
-                    @Override
-                    public void onNext(ResponseBean<ProjectListBean> responseBean) {
-                        result.setValue(responseBean);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Logs.e(TAG, e.toString() + "-----" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                .subscribe(responseBean -> {
+                    result.setValue(responseBean);
+                }, throwable -> {
+                    //TODO
+                }));
     }
 
     public MutableLiveData<ResponseBean> getCollectResult() {
@@ -72,51 +65,30 @@ public class ProjectListViewModel extends AndroidViewModel {
     }
 
     public void collectArticle(int id) {
-        HttpManager.getInstance().getService(HttpService.class)
+        disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .insideCollect(id)
                 .compose(RxSchedulers.ioMain())
-                .subscribe(new DefaultObserver<ResponseBean>() {
-                    @Override
-                    public void onNext(ResponseBean responseBean) {
-                        collectResult.setValue(responseBean);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Logs.e(TAG, e.toString() + "-----" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                .subscribe(responseBean -> {
+                    collectResult.setValue(responseBean);
+                }, throwable -> {
+                    //TODO
+                }));
     }
 
     public MutableLiveData<ResponseBean> getUnCollectResult() {
-        return UnCollectResult;
+        return unCollectResult;
     }
 
     public void unCollectArticle(int id) {
-        HttpManager.getInstance().getService(HttpService.class)
+        disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .articleListUncollect(id)
                 .compose(RxSchedulers.ioMain())
-                .subscribe(new DefaultObserver<ResponseBean>() {
-                    @Override
-                    public void onNext(ResponseBean responseBean) {
-                        UnCollectResult.setValue(responseBean);
-                    }
+                .subscribe(responseBean -> {
+                    unCollectResult.setValue(responseBean);
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Logs.e(TAG, e.toString() + "-----" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                }, throwable -> {
+                    //TODO
+                }));
 
     }
 }

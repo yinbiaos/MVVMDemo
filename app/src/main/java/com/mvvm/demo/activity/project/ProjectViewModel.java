@@ -14,13 +14,14 @@ import com.mvvm.demo.http.RxSchedulers;
 
 import java.util.List;
 
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DefaultObserver;
 
 /**
  * Created by hzy on 2019/3/20
  *
  * @author hzy
- * */
+ */
 public class ProjectViewModel extends AndroidViewModel {
 
     private static final String TAG = "ProjectViewModel";
@@ -30,8 +31,11 @@ public class ProjectViewModel extends AndroidViewModel {
      */
     private MutableLiveData<ResponseBean<List<ProjectBean>>> result = new MutableLiveData<>();
 
+    CompositeDisposable disposable;
+
     public ProjectViewModel(@NonNull Application application) {
         super(application);
+        disposable = new CompositeDisposable();
     }
 
     @Override
@@ -39,6 +43,7 @@ public class ProjectViewModel extends AndroidViewModel {
         super.onCleared();
         //页面销毁时调用
         Logs.d(TAG, "onCleared:");
+        disposable.clear();
     }
 
     public MutableLiveData<ResponseBean<List<ProjectBean>>> getResult() {
@@ -46,24 +51,13 @@ public class ProjectViewModel extends AndroidViewModel {
     }
 
     public void getProjectList() {
-        HttpManager.getInstance().getService(HttpService.class)
+        disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .getProjectSubject()
                 .compose(RxSchedulers.ioMain())
-                .subscribe(new DefaultObserver<ResponseBean<List<ProjectBean>>>() {
-                    @Override
-                    public void onNext(ResponseBean<List<ProjectBean>> listResponseBean) {
-                        result.setValue(listResponseBean);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Logs.e(TAG, e.toString() + "-----" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                .subscribe(listResponseBean -> {
+                    result.setValue(listResponseBean);
+                }, throwable -> {
+                    //TODO
+                }));
     }
 }
