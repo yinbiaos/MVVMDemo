@@ -13,7 +13,7 @@ import com.mvvm.demo.R;
 import com.mvvm.demo.activity.home.HomeFragment;
 import com.mvvm.demo.activity.navigat.NaviFragment;
 import com.mvvm.demo.activity.project.ProjectFragment;
-import com.mvvm.demo.activity.pubnum.PubFragment;
+import com.mvvm.demo.activity.pubnum.PublicAddrFragment;
 import com.mvvm.demo.activity.system.SystemFragment;
 import com.mvvm.demo.adapter.ViewPagerAdapter;
 
@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         fragments.add(ProjectFragment.getInstance());
         fragments.add(SystemFragment.getInstance());
         fragments.add(NaviFragment.getInstance());
-        fragments.add(PubFragment.newInstance());
+        fragments.add(PublicAddrFragment.getInstance());
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragments));
         viewPager.setOffscreenPageLimit(fragments.size());
         initListener();

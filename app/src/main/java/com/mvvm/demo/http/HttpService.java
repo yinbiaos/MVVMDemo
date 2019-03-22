@@ -7,6 +7,8 @@ import com.mvvm.demo.entity.LoginBean;
 import com.mvvm.demo.entity.NaviBean;
 import com.mvvm.demo.entity.ProjectBean;
 import com.mvvm.demo.entity.ProjectListBean;
+import com.mvvm.demo.entity.PubAddrListBean;
+import com.mvvm.demo.entity.PublicAddrBean;
 import com.mvvm.demo.entity.ResponseBean;
 import com.mvvm.demo.entity.SystemDataBean;
 
@@ -25,6 +27,39 @@ import retrofit2.http.Query;
  * @date 2019/3/18
  */
 public interface HttpService {
+
+    //############################公众号############################################################
+
+    /**
+     * 获取公众号列表 Public address
+     *
+     * @return
+     */
+    @GET("/wxarticle/chapters/json")
+    Observable<ResponseBean<List<PublicAddrBean>>> getPublicAddrList();
+
+    /**
+     * 查看某个公众号历史数据
+     *
+     * @return
+     */
+    @GET("/wxarticle/list/{id}/{page}/json")
+    Observable<ResponseBean<PubAddrListBean>> getPublicAddr(@Path("id") int id,
+                                                            @Path("page") int page);
+
+
+    /**
+     * 在某个公众号中搜索历史文章
+     *
+     * @return
+     */
+    @GET("/wxarticle/list/{id}/{page}/json")
+    Observable<ResponseBean<PubAddrListBean>> getSearchPub(@Path("id") int id,
+                                                           @Path("page") int page,
+                                                           @Query("k") String k);
+
+    //############################首页##############################################################
+
 
     /**
      * 1.1 首页文章列表
