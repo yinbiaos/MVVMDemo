@@ -61,8 +61,7 @@ public class ProjectListFragment extends BaseLoadAnimFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
@@ -92,34 +91,31 @@ public class ProjectListFragment extends BaseLoadAnimFragment {
             }
 
             @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder,
-                                           int position) {
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
                 return false;
             }
         });
         mAdapter.setmOnCollectListener((collect, id, position) -> {
             if (collect) {
                 viewModel.unCollectArticle(id);
-                viewModel.getUnCollectResult().observe(this,
-                        (ResponseBean responseBean) -> {
-                            if (responseBean == null) {
-                                return;
-                            }
-                            ToastUtil.showToast(mContext, "取消收藏成功");
-                            projectList.get(position).setCollect(false);
-                            mAdapter.notifyItemChanged(position);
-                        });
+                viewModel.getUnCollectResult().observe(this, (ResponseBean responseBean) -> {
+                    if (responseBean == null) {
+                        return;
+                    }
+                    ToastUtil.showToast(mContext, "取消收藏成功");
+                    projectList.get(position).setCollect(false);
+                    mAdapter.notifyItemChanged(position);
+                });
             } else {
                 viewModel.collectArticle(id);
-                viewModel.getCollectResult().observe(this,
-                        (ResponseBean responseBean) -> {
-                            if (responseBean.getErrorCode() != 0) {
-                                return;
-                            }
-                            ToastUtil.showToast(mContext, "收藏成功");
-                            projectList.get(position).setCollect(true);
-                            mAdapter.notifyItemChanged(position);
-                        });
+                viewModel.getCollectResult().observe(this, (ResponseBean responseBean) -> {
+                    if (responseBean.getErrorCode() != 0) {
+                        return;
+                    }
+                    ToastUtil.showToast(mContext, "收藏成功");
+                    projectList.get(position).setCollect(true);
+                    mAdapter.notifyItemChanged(position);
+                });
             }
         });
         mRefreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {

@@ -62,7 +62,7 @@ public class HomeFragment extends BaseLoadAnimFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(adapter = new ArticleAdapter(mContext, new ArrayList<>()));
         mRefreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
@@ -92,27 +92,9 @@ public class HomeFragment extends BaseLoadAnimFragment {
         });
         adapter.setmOnCollectListener((collect, id, position) -> {
             if (collect) {
-                homeViewModel.unCollectArticle(id);
-                homeViewModel.getUnCollectResult().observe(this,
-                        (ResponseBean responseBean) -> {
-                            if (responseBean == null) {
-                                return;
-                            }
-                            ToastUtil.showToast(mContext, "取消收藏成功");
-                            adapter.getDatas().get(position).setCollect(false);
-                            adapter.notifyItemChanged(position);
-                        });
+                homeViewModel.unCollectArticle(id, position);
             } else {
-                homeViewModel.collectArticle(id);
-                homeViewModel.getCollectResult().observe(this,
-                        (ResponseBean responseBean) -> {
-                            if (responseBean == null || responseBean.getErrorCode() != 0) {
-                                return;
-                            }
-                            ToastUtil.showToast(mContext, "收藏成功");
-                            adapter.getDatas().get(position).setCollect(true);
-                            adapter.notifyItemChanged(position);
-                        });
+                homeViewModel.collectArticle(id, position);
             }
         });
         startLoading(R.id.content);
@@ -140,6 +122,23 @@ public class HomeFragment extends BaseLoadAnimFragment {
                 mRefreshLayout.finishLoadMore();
                 mRefreshLayout.finishRefresh();
             }
+        });
+
+        homeViewModel.getCollectResult().observe(this, (ResponseBean responseBean) -> {
+//            if (responseBean == null || responseBean.getErrorCode() != 0) {
+//                return;
+//            }
+            ToastUtil.showToast(mContext, "收藏成功");
+            adapter.getDatas().get(homeViewModel.getPosition()).setCollect(true);
+            adapter.notifyItemChanged(homeViewModel.getPosition());
+        });
+        homeViewModel.getUnCollectResult().observe(this, (ResponseBean responseBean) -> {
+//            if (responseBean == null || responseBean.getErrorCode() != 0) {
+//                return;
+//            }
+            ToastUtil.showToast(mContext, "取消收藏成功");
+            adapter.getDatas().get(homeViewModel.getPosition()).setCollect(false);
+            adapter.notifyItemChanged(homeViewModel.getPosition());
         });
 
     }

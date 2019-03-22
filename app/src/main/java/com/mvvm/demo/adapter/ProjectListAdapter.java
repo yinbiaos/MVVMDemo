@@ -31,8 +31,7 @@ public class ProjectListAdapter extends CommonAdapter<ProjectListBean.DatasBean>
         this.mOnCollectListener = mOnCollectListener;
     }
 
-    public ProjectListAdapter(Context context,
-                              List<ProjectListBean.DatasBean> datas) {
+    public ProjectListAdapter(Context context, List<ProjectListBean.DatasBean> datas) {
         super(context, R.layout.item_project_list, datas);
         mContext = context;
     }
