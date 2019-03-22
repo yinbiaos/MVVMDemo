@@ -3,6 +3,7 @@ package com.mvvm.demo.activity.home;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import com.base.lib.ToastUtil;
 import com.mvvm.demo.BaseLoadAnimFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.X5WebView;
+import com.mvvm.demo.activity.login.LoginActivity;
 import com.mvvm.demo.adapter.ArticleAdapter;
 import com.mvvm.demo.entity.ArticleBean;
 import com.mvvm.demo.entity.ResponseBean;
@@ -140,6 +142,13 @@ public class HomeFragment extends BaseLoadAnimFragment {
             adapter.getDatas().get(homeViewModel.getPosition()).setCollect(false);
             adapter.notifyItemChanged(homeViewModel.getPosition());
         });
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(mContext, LoginActivity.class));
+            }
+        }, 1000);
 
     }
 }
