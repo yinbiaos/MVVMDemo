@@ -61,7 +61,8 @@ public class ProjectListFragment extends BaseLoadAnimFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
@@ -91,31 +92,16 @@ public class ProjectListFragment extends BaseLoadAnimFragment {
             }
 
             @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder,
+                                           int position) {
                 return false;
             }
         });
         mAdapter.setmOnCollectListener((collect, id, position) -> {
             if (collect) {
-                viewModel.unCollectArticle(id);
-                viewModel.getUnCollectResult().observe(this, (ResponseBean responseBean) -> {
-                    if (responseBean == null) {
-                        return;
-                    }
-                    ToastUtil.showToast(mContext, "取消收藏成功");
-                    projectList.get(position).setCollect(false);
-                    mAdapter.notifyItemChanged(position);
-                });
+                viewModel.unCollectArticle(id, position);
             } else {
-                viewModel.collectArticle(id);
-                viewModel.getCollectResult().observe(this, (ResponseBean responseBean) -> {
-                    if (responseBean.getErrorCode() != 0) {
-                        return;
-                    }
-                    ToastUtil.showToast(mContext, "收藏成功");
-                    projectList.get(position).setCollect(true);
-                    mAdapter.notifyItemChanged(position);
-                });
+                viewModel.collectArticle(id, position);
             }
         });
         mRefreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
@@ -154,6 +140,26 @@ public class ProjectListFragment extends BaseLoadAnimFragment {
                 mRefreshLayout.finishLoadMore();
                 mRefreshLayout.finishRefresh();
             }
+        });
+
+        viewModel.getUnCollectResult().observe(this, (ResponseBean responseBean) -> {
+            if (responseBean == null || responseBean.getErrorCode() != 0) {
+                ToastUtil.showToast(mContext, responseBean.getErrorMsg());
+                return;
+            }
+            ToastUtil.showToast(mContext, "取消收藏成功");
+            projectList.get(viewModel.getPosition()).setCollect(false);
+            mAdapter.notifyItemChanged(viewModel.getPosition());
+        });
+
+        viewModel.getCollectResult().observe(this, (ResponseBean responseBean) -> {
+            if (responseBean == null || responseBean.getErrorCode() != 0) {
+                ToastUtil.showToast(mContext, responseBean.getErrorMsg());
+                return;
+            }
+            ToastUtil.showToast(mContext, "收藏成功");
+            projectList.get(viewModel.getPosition()).setCollect(true);
+            mAdapter.notifyItemChanged(viewModel.getPosition());
         });
     }
 

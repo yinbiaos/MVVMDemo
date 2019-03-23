@@ -85,7 +85,8 @@ public class HomeFragment extends BaseLoadAnimFragment {
             }
 
             @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder,
+                                           int position) {
                 return false;
             }
         });
@@ -124,17 +125,19 @@ public class HomeFragment extends BaseLoadAnimFragment {
         });
 
         homeViewModel.getCollectResult().observe(this, (ResponseBean responseBean) -> {
-//            if (responseBean == null || responseBean.getErrorCode() != 0) {
-//                return;
-//            }
+            if (responseBean == null || responseBean.getErrorCode() != 0) {
+                ToastUtil.showToast(mContext, responseBean.getErrorMsg());
+                return;
+            }
             ToastUtil.showToast(mContext, "收藏成功");
             adapter.getDatas().get(homeViewModel.getPosition()).setCollect(true);
             adapter.notifyItemChanged(homeViewModel.getPosition());
         });
         homeViewModel.getUnCollectResult().observe(this, (ResponseBean responseBean) -> {
-//            if (responseBean == null || responseBean.getErrorCode() != 0) {
-//                return;
-//            }
+            if (responseBean == null || responseBean.getErrorCode() != 0) {
+                ToastUtil.showToast(mContext, responseBean.getErrorMsg());
+                return;
+            }
             ToastUtil.showToast(mContext, "取消收藏成功");
             adapter.getDatas().get(homeViewModel.getPosition()).setCollect(false);
             adapter.notifyItemChanged(homeViewModel.getPosition());

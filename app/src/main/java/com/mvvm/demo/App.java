@@ -16,6 +16,8 @@ import java.io.File;
  */
 public class App extends Application {
 
+    private static App instance;
+
     /**
      * 日志文件存储路径
      */
@@ -24,9 +26,16 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         //初始化SharedPreference
         SharedHelper.getInstance().init(getApplicationContext());
         SmartRefreshLayout.setDefaultRefreshHeaderCreator((context, layout) -> new ClassicsHeader(context));
         SmartRefreshLayout.setDefaultRefreshFooterCreator(((context, layout) -> new ClassicsFooter(context)));
     }
+
+
+    public static synchronized App getInstance() {
+        return instance;
+    }
+
 }

@@ -213,17 +213,19 @@ import butterknife.BindView;
         });
 
         viewModel.getCollectResult().observe(this, (ResponseBean responseBean) -> {
-//            if (responseBean == null || responseBean.getErrorCode() != 0) {
-//                return;
-//            }
+            if (responseBean == null || responseBean.getErrorCode() != 0) {
+                ToastUtil.showToast(mContext, responseBean.getErrorMsg());
+                return;
+            }
             ToastUtil.showToast(mContext, "收藏成功");
             mListAdapter.getDatas().get(viewModel.getPosition()).setCollect(true);
             mListAdapter.notifyItemChanged(viewModel.getPosition());
         });
         viewModel.getUnCollectResult().observe(this, (ResponseBean responseBean) -> {
-//            if (responseBean == null || responseBean.getErrorCode() != 0) {
-//                return;
-//            }
+            if (responseBean == null || responseBean.getErrorCode() != 0) {
+                ToastUtil.showToast(mContext, responseBean.getErrorMsg());
+                return;
+            }
             ToastUtil.showToast(mContext, "取消收藏成功");
             mListAdapter.getDatas().get(viewModel.getPosition()).setCollect(false);
             mListAdapter.notifyItemChanged(viewModel.getPosition());

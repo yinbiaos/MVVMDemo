@@ -1,5 +1,10 @@
 package com.mvvm.demo.http;
 
+import com.franmontiel.persistentcookiejar.PersistentCookieJar;
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.mvvm.demo.App;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +36,14 @@ public class HttpManager {
      */
     private Map<Class, Object> map = new HashMap<>();
 
+    private PersistentCookieJar cookieJar;
+
+
     private HttpManager() {
+
+        cookieJar = new PersistentCookieJar(new SetCookieCache(), new
+                SharedPrefsCookiePersistor(App.getInstance()));
+
         OkHttpClient client = new OkHttpClient.Builder()
 //                .addInterceptor(new HeadInterceptor())
                 .addInterceptor(new HttpLogInterceptor())
@@ -39,6 +51,7 @@ public class HttpManager {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
+                .cookieJar(cookieJar)
                 .build();
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

@@ -32,6 +32,8 @@ public class ProjectListViewModel extends AndroidViewModel {
     private MutableLiveData<ResponseBean> collectResult = new MutableLiveData<>();
     private MutableLiveData<ResponseBean> unCollectResult = new MutableLiveData<>();
 
+    private int mPosition;
+
     public ProjectListViewModel(@NonNull Application application) {
         super(application);
         disposable = new CompositeDisposable();
@@ -49,6 +51,18 @@ public class ProjectListViewModel extends AndroidViewModel {
         return result;
     }
 
+    public MutableLiveData<ResponseBean> getCollectResult() {
+        return collectResult;
+    }
+
+    public MutableLiveData<ResponseBean> getUnCollectResult() {
+        return unCollectResult;
+    }
+
+    public int getPosition() {
+        return mPosition;
+    }
+
     public void getProjectList(int page, int cid) {
         disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .getProjectList(page, cid)
@@ -60,35 +74,27 @@ public class ProjectListViewModel extends AndroidViewModel {
                 }));
     }
 
-    public MutableLiveData<ResponseBean> getCollectResult() {
-        return collectResult;
-    }
-
-    public void collectArticle(int id) {
+    public void collectArticle(int id, int position) {
         disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .insideCollect(id)
                 .compose(RxSchedulers.ioMain())
                 .subscribe(responseBean -> {
+                    mPosition = position;
                     collectResult.setValue(responseBean);
                 }, throwable -> {
-                    //TODO
+                    Logs.e(TAG, throwable.toString() + "-----" + throwable.getMessage());
                 }));
     }
 
-    public MutableLiveData<ResponseBean> getUnCollectResult() {
-        return unCollectResult;
-    }
-
-    public void unCollectArticle(int id) {
+    public void unCollectArticle(int id, int position) {
         disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .articleListUncollect(id)
                 .compose(RxSchedulers.ioMain())
                 .subscribe(responseBean -> {
+                    mPosition = position;
                     unCollectResult.setValue(responseBean);
-
                 }, throwable -> {
-                    //TODO
+                    Logs.e(TAG, throwable.toString() + "-----" + throwable.getMessage());
                 }));
-
     }
 }
