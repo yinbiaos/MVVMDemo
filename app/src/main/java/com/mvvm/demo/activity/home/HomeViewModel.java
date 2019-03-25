@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import com.base.lib.Logs;
 import com.mvvm.demo.entity.ArticleBean;
 import com.mvvm.demo.entity.ResponseBean;
+import com.mvvm.demo.http.HttpFilter;
 import com.mvvm.demo.http.HttpManager;
 import com.mvvm.demo.http.HttpService;
 import com.mvvm.demo.http.RxSchedulers;
@@ -76,11 +77,13 @@ public class HomeViewModel extends AndroidViewModel {
         disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .insideCollect(id)
                 .compose(RxSchedulers.ioMain())
+                .filter(HttpFilter.createLoginFilter())
                 .subscribe(responseBean -> {
                     mPosition = position;
                     collectResult.setValue(responseBean);
                 }, throwable -> {
                     Logs.e(TAG, throwable.toString() + "-----" + throwable.getMessage());
+                    collectResult.setValue(null);
                 }));
     }
 
@@ -94,6 +97,7 @@ public class HomeViewModel extends AndroidViewModel {
                     unCollectResult.setValue(responseBean);
                 }, throwable -> {
                     Logs.e(TAG, throwable.toString() + "-----" + throwable.getMessage());
+                    collectResult.setValue(null);
                 }));
     }
 

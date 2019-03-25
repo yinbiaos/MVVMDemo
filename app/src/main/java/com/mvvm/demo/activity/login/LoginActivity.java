@@ -4,6 +4,7 @@ package com.mvvm.demo.activity.login;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -18,7 +19,10 @@ import com.mvvm.demo.activity.register.RegisterActivity;
 import com.mvvm.demo.config.Constants;
 import com.mvvm.demo.entity.LoginBean;
 import com.mvvm.demo.entity.ResponseBean;
+import com.mvvm.demo.event.LoginSuccessEvent;
 import com.mvvm.demo.widget.TitleBarLayout;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -43,7 +47,7 @@ public class LoginActivity extends BaseActivity {
     private String username;
     private String password;
 
-    Boolean isOtherToLogin = false;
+    boolean isOtherToLogin = false;
 
     private LoginViewModel viewModel;
 
@@ -59,9 +63,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     protected void initViewAndData() {
-        /**
-         * //从注册界面跳转过来直接记录账号密码
-         */
+        //从注册界面跳转过来直接记录账号密码
         if (getIntent().getExtras() != null) {
             isOtherToLogin = true;
             username = getIntent().getStringExtra("username");
@@ -70,8 +72,8 @@ public class LoginActivity extends BaseActivity {
             mEtPassword.setText(password);
         }
         viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
-        mTitleBar.setTitleBarBackgroundColor(getResources().getColor(R.color.c_6c8cff));
-        mTitleBar.setTitleColor(getResources().getColor(R.color.c_ffffff));
+        mTitleBar.setTitleBarBackgroundColor(ContextCompat.getColor(mContext, R.color.c_6c8cff));
+        mTitleBar.setTitleColor(ContextCompat.getColor(mContext, R.color.c_ffffff));
         mTitleBar.setTitle("登录");
     }
 
@@ -88,7 +90,8 @@ public class LoginActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bt_login:
-                login();//登录按钮
+                //登录按钮
+                login();
                 break;
             case R.id.bt_reset_password:
                 //重置密码
@@ -118,9 +121,10 @@ public class LoginActivity extends BaseActivity {
                 }
                 if (responseBean.getErrorCode() == 0) {
                     ToastUtil.showToast(mContext, "登录成功");
-                    LoginBean loginBean = (LoginBean) responseBean.getData();
+                    LoginBean loginBean = responseBean.getData();
                     SharedHelper.getInstance().put(Constants.USERNAME, loginBean.getUsername());
-                    SharedHelper.getInstance().put(Constants.ISLOGIN, true);
+                    //发送登录成功事件
+                    EventBus.getDefault().post(new LoginSuccessEvent());
                     startActivity(new Intent(this, MainActivity.class));
                     finish();
                 } else {

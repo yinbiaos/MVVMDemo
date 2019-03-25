@@ -12,17 +12,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.base.lib.Logs;
 import com.mvvm.demo.BaseLoadAnimFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.X5WebView;
 import com.mvvm.demo.adapter.ArticleAdapter;
 import com.mvvm.demo.entity.ArticleBean;
 import com.mvvm.demo.entity.ResponseBean;
+import com.mvvm.demo.event.LoginSuccessEvent;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -34,7 +40,7 @@ import butterknife.BindView;
  * @author yinbiao
  * @date 2019/3/8
  */
-public class HomeFragment extends BaseLoadAnimFragment {
+public class HomeFragment extends BaseLoadAnimFragment implements MultiItemTypeAdapter.OnItemClickListener, OnRefreshLoadMoreListener {
 
     private static final String TAG = "HomeFragment";
 
@@ -54,41 +60,18 @@ public class HomeFragment extends BaseLoadAnimFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        EventBus.getDefault().register(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(adapter = new ArticleAdapter(mContext, new ArrayList<>()));
-        mRefreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
-            @Override
-            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                homeViewModel.getArticle(pageIndex);
-            }
-
-            @Override
-            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                homeViewModel.getArticle(pageIndex = 0);
-            }
-        });
-        adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(mContext, X5WebView.class);
-                intent.putExtra("mUrl", adapter.getDatas().get(position).getLink());
-                intent.putExtra("mTitle", adapter.getDatas().get(position).getTitle());
-                startActivity(intent);
-            }
-
-            @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
-                return false;
-            }
-        });
+        mRefreshLayout.setOnRefreshLoadMoreListener(this);
+        adapter.setOnItemClickListener(this);
         adapter.setmOnCollectListener((collect, id, position) -> {
             progressDialog.show();
             if (collect) {
@@ -99,6 +82,12 @@ public class HomeFragment extends BaseLoadAnimFragment {
         });
         startLoading(R.id.content);
         initData();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 
     private void initData() {
@@ -142,5 +131,34 @@ public class HomeFragment extends BaseLoadAnimFragment {
             adapter.getDatas().get(homeViewModel.getPosition()).setCollect(false);
             adapter.notifyItemChanged(homeViewModel.getPosition());
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginSuccess(LoginSuccessEvent event) {
+        Logs.d(TAG, "loginSuccess:刷新首页数据");
+        homeViewModel.getArticle(pageIndex = 0);
+    }
+
+    @Override
+    public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+        Intent intent = new Intent(mContext, X5WebView.class);
+        intent.putExtra("mUrl", adapter.getDatas().get(position).getLink());
+        intent.putExtra("mTitle", adapter.getDatas().get(position).getTitle());
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+        return false;
+    }
+
+    @Override
+    public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+        homeViewModel.getArticle(pageIndex);
+    }
+
+    @Override
+    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+        homeViewModel.getArticle(pageIndex = 0);
     }
 }

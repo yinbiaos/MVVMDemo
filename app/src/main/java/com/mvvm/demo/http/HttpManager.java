@@ -1,9 +1,5 @@
 package com.mvvm.demo.http;
 
-import android.support.annotation.NonNull;
-
-import com.base.lib.Logs;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +43,6 @@ public class HttpManager {
 
     private HttpManager() {
         OkHttpClient client = new OkHttpClient.Builder()
-//                .addInterceptor(new HeadInterceptor())
                 .addInterceptor(new HttpLogInterceptor())
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
@@ -57,14 +52,12 @@ public class HttpManager {
                     @Override
                     @EverythingIsNonNull
                     public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-                        Logs.d(TAG, url.host());
                         cookieStore.put(url.host(), cookies);
                     }
 
                     @Override
                     @EverythingIsNonNull
                     public List<Cookie> loadForRequest(HttpUrl url) {
-                        Logs.d(TAG, url.host());
                         List<Cookie> cookies = cookieStore.get(url.host());
                         return cookies != null ? cookies : new ArrayList<>();
                     }

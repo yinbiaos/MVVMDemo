@@ -2,8 +2,12 @@ package com.mvvm.demo;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+
+import com.base.lib.Logs;
+import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -21,6 +25,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected Context mContext;
     protected Unbinder unbinder;
 
+    protected QMUITipDialog tipDialog;
+    private Handler handler = new Handler();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +35,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mContext = this;
         //View注解框架绑定
         unbinder = ButterKnife.bind(this);
+        App.getInstance().addContext(this);
     }
 
     /**
@@ -40,10 +48,34 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Logs.d(TAG, "onDestroy:" + mContext.toString());
         if (unbinder != null) {
             //ButterKnife解绑
             unbinder.unbind();
         }
+
+        if (tipDialog != null) {
+            tipDialog.cancel();
+        }
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(this);
+        }
+        App.getInstance().removeContext(this);
+    }
+
+    /**
+     * show tips
+     *
+     * @param tips 提示语
+     * @see com.qmuiteam.qmui.widget.dialog.QMUITipDialog.Builder.IconType
+     */
+    protected void showTipsDialog(@QMUITipDialog.Builder.IconType int tipType, String tips) {
+        tipDialog = new QMUITipDialog.Builder(mContext)
+                .setIconType(QMUITipDialog.Builder.ICON_TYPE_SUCCESS)
+                .setTipWord(tips)
+                .create();
+        tipDialog.show();
+        handler.postDelayed(tipDialog::cancel, 1500);
     }
 
 }

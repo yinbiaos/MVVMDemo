@@ -52,14 +52,14 @@ public abstract class BaseFragment extends Fragment {
         if (unbinder != null) {
             unbinder.unbind();
         }
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(this);
-        }
         if (progressDialog != null) {
             progressDialog.cancel();
         }
         if (tipDialog != null) {
             tipDialog.cancel();
+        }
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(this);
         }
     }
 
