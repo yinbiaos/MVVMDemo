@@ -1,10 +1,20 @@
 package com.mvvm.demo.http;
 
+import android.support.annotation.NonNull;
+
+import com.base.lib.Logs;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+import okhttp3.internal.annotations.EverythingIsNonNull;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -16,6 +26,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @date 2019/3/18
  */
 public class HttpManager {
+
+    private static final String TAG = "HttpManager";
 
     public static final String BASE_URL = "https://www.wanandroid.com";
 
@@ -31,6 +43,8 @@ public class HttpManager {
      */
     private Map<Class, Object> map = new HashMap<>();
 
+    private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
+
     private HttpManager() {
         OkHttpClient client = new OkHttpClient.Builder()
 //                .addInterceptor(new HeadInterceptor())
@@ -39,6 +53,22 @@ public class HttpManager {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
+                .cookieJar(new CookieJar() {
+                    @Override
+                    @EverythingIsNonNull
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+                        Logs.d(TAG, url.host());
+                        cookieStore.put(url.host(), cookies);
+                    }
+
+                    @Override
+                    @EverythingIsNonNull
+                    public List<Cookie> loadForRequest(HttpUrl url) {
+                        Logs.d(TAG, url.host());
+                        List<Cookie> cookies = cookieStore.get(url.host());
+                        return cookies != null ? cookies : new ArrayList<>();
+                    }
+                })
                 .build();
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
