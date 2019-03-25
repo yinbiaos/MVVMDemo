@@ -33,7 +33,8 @@ public class HttpLogInterceptor implements Interceptor {
         Request request = chain.request();
         //请求发起的时间
         long t1 = System.nanoTime();
-        Logs.i(TAG, String.format(Locale.getDefault(), "发送请求: %s  %nmethod: %s   ", request.url(), request.method()));
+        Logs.d(TAG, "----------Start----------------");
+        Logs.i(TAG, request.toString());
         RequestBody requestBody = request.body();
         if (requestBody != null && requestBody.contentLength() > 0) {
             StringBuilder sb = new StringBuilder();
@@ -53,11 +54,11 @@ public class HttpLogInterceptor implements Interceptor {
         if (body != null) {
             //这里body.contentLength()有可能为-1，需要特殊处理
             ResponseBody rb = response.peekBody(body.contentLength() > 0 ? body.contentLength() : Integer.MAX_VALUE);
-            Logs.i(TAG, String.format(Locale.getDefault(), "耗时：%.1fms 接收响应：%s  %n响应码：[%s] %n返回json:%s ",
-                    (t2 - t1) / 1e6d,
-                    response.request().url(),
-                    response.code(),
-                    rb.string()));
+            Logs.d(TAG, "Response:url：" + response.request().url());
+            Logs.d(TAG, "Response:响应码：" + response.code());
+            Logs.d(TAG, "Response:耗时：" + (t2 - t1) / 1e6d + "ms");
+            Logs.d(TAG, "Response:" + rb.string());
+            Logs.d(TAG, "----------End----------------");
         }
         if (!response.isSuccessful()) {
             Logs.d(TAG, "HttpException:" + response.code() + "：" + response.message());

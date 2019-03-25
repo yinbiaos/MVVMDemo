@@ -1,15 +1,16 @@
 package com.mvvm.demo.http;
 
-import com.franmontiel.persistentcookiejar.PersistentCookieJar;
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
-import com.mvvm.demo.App;
-
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+import okhttp3.internal.annotations.EverythingIsNonNull;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -21,6 +22,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @date 2019/3/18
  */
 public class HttpManager {
+
+    private static final String TAG = "HttpManager";
 
     public static final String BASE_URL = "https://www.wanandroid.com";
 
@@ -36,6 +39,8 @@ public class HttpManager {
      */
     private Map<Class, Object> map = new HashMap<>();
 
+    private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
+
     private PersistentCookieJar cookieJar;
 
 
@@ -45,12 +50,25 @@ public class HttpManager {
                 SharedPrefsCookiePersistor(App.getInstance()));
 
         OkHttpClient client = new OkHttpClient.Builder()
-//                .addInterceptor(new HeadInterceptor())
                 .addInterceptor(new HttpLogInterceptor())
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
+                .cookieJar(new CookieJar() {
+                    @Override
+                    @EverythingIsNonNull
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+                        cookieStore.put(url.host(), cookies);
+                    }
+
+                    @Override
+                    @EverythingIsNonNull
+                    public List<Cookie> loadForRequest(HttpUrl url) {
+                        List<Cookie> cookies = cookieStore.get(url.host());
+                        return cookies != null ? cookies : new ArrayList<>();
+                    }
+                })
                 .cookieJar(cookieJar)
                 .build();
         retrofit = new Retrofit.Builder()
