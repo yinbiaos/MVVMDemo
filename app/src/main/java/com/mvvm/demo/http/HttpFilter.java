@@ -2,7 +2,6 @@ package com.mvvm.demo.http;
 
 import android.content.Intent;
 
-import com.base.lib.Logs;
 import com.mvvm.demo.App;
 import com.mvvm.demo.activity.login.LoginActivity;
 import com.mvvm.demo.entity.ResponseBean;
@@ -19,6 +18,8 @@ import io.reactivex.functions.Predicate;
  */
 public class HttpFilter {
 
+    private static final int CODE_LOGIN = -1001;
+
     /**
      * 创建登录消息过滤器
      *
@@ -28,9 +29,9 @@ public class HttpFilter {
         return new Predicate<ResponseBean>() {
             @Override
             public boolean test(ResponseBean responseBean) throws Exception {
-                if (responseBean.getErrorCode() == -1001) {
+                if (responseBean.getErrorCode() == CODE_LOGIN) {
                     showMessagePositiveDialog();
-                    throw new Exception(responseBean.getErrorMsg());
+                    throw new Exception();
                 }
                 return true;
             }

@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.base.lib.Logs;
-import com.mvvm.demo.BaseLoadAnimFragment;
+import com.mvvm.demo.BaseLazyFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.X5WebView;
 import com.mvvm.demo.adapter.ArticleAdapter;
@@ -40,7 +40,7 @@ import butterknife.BindView;
  * @author yinbiao
  * @date 2019/3/8
  */
-public class HomeFragment extends BaseLoadAnimFragment implements MultiItemTypeAdapter.OnItemClickListener, OnRefreshLoadMoreListener {
+public class HomeFragment extends BaseLazyFragment implements MultiItemTypeAdapter.OnItemClickListener, OnRefreshLoadMoreListener {
 
     private static final String TAG = "HomeFragment";
 
@@ -80,24 +80,18 @@ public class HomeFragment extends BaseLoadAnimFragment implements MultiItemTypeA
                 homeViewModel.collectArticle(id, position);
             }
         });
-        startLoading(R.id.content);
-        initData();
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        EventBus.getDefault().unregister(this);
-    }
-
-    private void initData() {
+    protected void onLazyLoad() {
+        startLoading(R.id.content);
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         homeViewModel.getArticle(pageIndex);
         homeViewModel.getResult().observe(this, (ResponseBean<ArticleBean> result) -> {
+            done();
             if (result == null) {
                 return;
             }
-            done();
             if (pageIndex == 0) {
                 adapter.getDatas().clear();
             }
@@ -112,7 +106,6 @@ public class HomeFragment extends BaseLoadAnimFragment implements MultiItemTypeA
                 mRefreshLayout.finishRefresh();
             }
         });
-
         homeViewModel.getCollectResult().observe(this, (ResponseBean responseBean) -> {
             progressDialog.cancel();
             if (responseBean == null || responseBean.getErrorCode() != 0) {
@@ -131,6 +124,12 @@ public class HomeFragment extends BaseLoadAnimFragment implements MultiItemTypeA
             adapter.getDatas().get(homeViewModel.getPosition()).setCollect(false);
             adapter.notifyItemChanged(homeViewModel.getPosition());
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

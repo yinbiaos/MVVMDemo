@@ -82,7 +82,6 @@ public class HomeViewModel extends AndroidViewModel {
                     mPosition = position;
                     collectResult.setValue(responseBean);
                 }, throwable -> {
-                    Logs.e(TAG, throwable.toString() + "-----" + throwable.getMessage());
                     collectResult.setValue(null);
                 }));
     }
@@ -96,7 +95,6 @@ public class HomeViewModel extends AndroidViewModel {
                     mPosition = position;
                     unCollectResult.setValue(responseBean);
                 }, throwable -> {
-                    Logs.e(TAG, throwable.toString() + "-----" + throwable.getMessage());
                     collectResult.setValue(null);
                 }));
     }
