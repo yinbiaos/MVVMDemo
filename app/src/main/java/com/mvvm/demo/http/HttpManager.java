@@ -1,5 +1,10 @@
 package com.mvvm.demo.http;
 
+import com.franmontiel.persistentcookiejar.PersistentCookieJar;
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.mvvm.demo.App;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
