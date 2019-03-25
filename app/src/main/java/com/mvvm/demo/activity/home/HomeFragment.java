@@ -12,13 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.base.lib.ToastUtil;
 import com.mvvm.demo.BaseLoadAnimFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.X5WebView;
 import com.mvvm.demo.adapter.ArticleAdapter;
 import com.mvvm.demo.entity.ArticleBean;
 import com.mvvm.demo.entity.ResponseBean;
+import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -90,6 +90,7 @@ public class HomeFragment extends BaseLoadAnimFragment {
             }
         });
         adapter.setmOnCollectListener((collect, id, position) -> {
+            progressDialog.show();
             if (collect) {
                 homeViewModel.unCollectArticle(id, position);
             } else {
@@ -124,18 +125,20 @@ public class HomeFragment extends BaseLoadAnimFragment {
         });
 
         homeViewModel.getCollectResult().observe(this, (ResponseBean responseBean) -> {
-//            if (responseBean == null || responseBean.getErrorCode() != 0) {
-//                return;
-//            }
-            ToastUtil.showToast(mContext, "收藏成功");
+            progressDialog.cancel();
+            if (responseBean == null || responseBean.getErrorCode() != 0) {
+                return;
+            }
+            showTipsDialog(QMUITipDialog.Builder.ICON_TYPE_SUCCESS, "收藏成功");
             adapter.getDatas().get(homeViewModel.getPosition()).setCollect(true);
             adapter.notifyItemChanged(homeViewModel.getPosition());
         });
         homeViewModel.getUnCollectResult().observe(this, (ResponseBean responseBean) -> {
-//            if (responseBean == null || responseBean.getErrorCode() != 0) {
-//                return;
-//            }
-            ToastUtil.showToast(mContext, "取消收藏成功");
+            progressDialog.cancel();
+            if (responseBean == null || responseBean.getErrorCode() != 0) {
+                return;
+            }
+            showTipsDialog(QMUITipDialog.Builder.ICON_TYPE_SUCCESS, "取消收藏成功");
             adapter.getDatas().get(homeViewModel.getPosition()).setCollect(false);
             adapter.notifyItemChanged(homeViewModel.getPosition());
         });
