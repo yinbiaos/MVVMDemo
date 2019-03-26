@@ -12,8 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.base.lib.Logs;
 import com.base.lib.ToastUtil;
-import com.mvvm.demo.BaseLoadAnimFragment;
+import com.mvvm.demo.BaseLazyFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.X5WebView;
 import com.mvvm.demo.adapter.ArticleAdapter;
@@ -34,7 +35,7 @@ import butterknife.BindView;
  * @author yinbiao
  * @date 2019/3/8
  */
-public class HomeFragment extends BaseLoadAnimFragment {
+public class HomeFragment extends BaseLazyFragment {
 
     private static final String TAG = "HomeFragment";
 
@@ -54,8 +55,7 @@ public class HomeFragment extends BaseLoadAnimFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -97,11 +97,12 @@ public class HomeFragment extends BaseLoadAnimFragment {
                 homeViewModel.collectArticle(id, position);
             }
         });
-        startLoading(R.id.content);
-        initData();
     }
 
-    private void initData() {
+    @Override
+    protected void onLazyLoad() {
+        Logs.d(TAG, "onLazyLoad");
+        startLoading(R.id.content);
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         homeViewModel.getArticle(pageIndex);
         homeViewModel.getResult().observe(this, (ResponseBean<ArticleBean> result) -> {
@@ -126,7 +127,6 @@ public class HomeFragment extends BaseLoadAnimFragment {
 
         homeViewModel.getCollectResult().observe(this, (ResponseBean responseBean) -> {
             if (responseBean == null || responseBean.getErrorCode() != 0) {
-                ToastUtil.showToast(mContext, responseBean.getErrorMsg());
                 return;
             }
             ToastUtil.showToast(mContext, "收藏成功");
@@ -135,7 +135,6 @@ public class HomeFragment extends BaseLoadAnimFragment {
         });
         homeViewModel.getUnCollectResult().observe(this, (ResponseBean responseBean) -> {
             if (responseBean == null || responseBean.getErrorCode() != 0) {
-                ToastUtil.showToast(mContext, responseBean.getErrorMsg());
                 return;
             }
             ToastUtil.showToast(mContext, "取消收藏成功");
@@ -143,4 +142,5 @@ public class HomeFragment extends BaseLoadAnimFragment {
             adapter.notifyItemChanged(homeViewModel.getPosition());
         });
     }
+
 }

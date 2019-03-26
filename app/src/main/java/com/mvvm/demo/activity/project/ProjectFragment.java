@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.base.lib.Logs;
 import com.mvvm.demo.BaseLazyFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.PubActivity;
@@ -37,7 +38,6 @@ public class ProjectFragment extends BaseLazyFragment {
 
     public static final String TAG = "ProjectFragment";
 
-    private static ProjectFragment instance = null;
 
     public static final int REQ_CODE = 0x11;
 
@@ -53,11 +53,8 @@ public class ProjectFragment extends BaseLazyFragment {
 
     private ProjectViewModel viewModel;
 
-    public static ProjectFragment getInstance() {
-        if (instance == null) {
-            instance = new ProjectFragment();
-        }
-        return instance;
+    public static ProjectFragment newInstance() {
+        return new ProjectFragment();
     }
 
     @Nullable
@@ -73,6 +70,7 @@ public class ProjectFragment extends BaseLazyFragment {
 
     @Override
     protected void onLazyLoad() {
+        Logs.d(TAG,"onLazyLoad");
         initEventAndData();
     }
 
@@ -105,7 +103,7 @@ public class ProjectFragment extends BaseLazyFragment {
             mTablayout.setTabMode(TabLayout.MODE_SCROLLABLE);
             mPubAdapter = new ViewPagerAdapter(getChildFragmentManager(), fragmentList, titleList);
             mViewPager.setAdapter(mPubAdapter);
-            mViewPager.setOffscreenPageLimit(5);
+            mViewPager.setOffscreenPageLimit(fragmentList.size());
             mViewPager.setCurrentItem(0);
         });
     }

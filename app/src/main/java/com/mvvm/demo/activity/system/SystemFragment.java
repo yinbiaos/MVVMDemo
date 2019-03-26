@@ -57,21 +57,8 @@ public class SystemFragment extends BaseLazyFragment {
 
     private SystemViewModel viewModel;
 
-    public static SystemFragment getInstance() {
-        if (instance == null) {
-            instance = new SystemFragment();
-        }
-        return instance;
-    }
-
-    public static SystemFragment getInstance(String title) {
-        if (instance == null) {
-            Bundle bundle = new Bundle();
-            bundle.putString(TAG, title);
-            instance = new SystemFragment();
-            instance.setArguments(bundle);
-        }
-        return instance;
+    public static SystemFragment newInstance() {
+        return new SystemFragment();
     }
 
     @Nullable

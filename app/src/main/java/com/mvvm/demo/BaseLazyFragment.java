@@ -1,11 +1,7 @@
 package com.mvvm.demo;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.base.lib.Logs;
 
@@ -27,34 +23,32 @@ public abstract class BaseLazyFragment extends BaseLoadAnimFragment {
      * 是否已经执行过加载
      */
     private boolean isLazyLoaded = false;
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Logs.d(TAG, "onCreateView");
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Logs.d(TAG, "onViewCreated");
-    }
+    /**
+     * 是否可见的
+     */
+    private boolean isVisible = false;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Logs.d(TAG, "onActivityCreated");
+        //初始化时加载数据，一般只有第一个显示的页面进入此方法
         isPrepared = true;
-        onLazyLoad();
+        if (isVisible && !isLazyLoaded) {
+            isLazyLoaded = true;
+            onLazyLoad();
+            Logs.d(TAG, this.getClass().getSimpleName() + "onActivityCreated.onLazyLoad()");
+        }
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && !isLazyLoaded && isPrepared) {
+        isVisible = isVisibleToUser;
+        //切换可见时加载数据，一般除了第一个页面都进入此方法
+        if (isVisible && !isLazyLoaded && isPrepared) {
             isLazyLoaded = true;
             onLazyLoad();
+            Logs.d(TAG, this.toString() + "setUserVisibleHint.onLazyLoad()");
         }
     }
 

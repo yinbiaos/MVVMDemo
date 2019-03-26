@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mvvm.demo.BaseLazyFragment;
-import com.mvvm.demo.BaseLoadAnimFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.X5WebView;
 import com.mvvm.demo.adapter.NaviAdapter;
@@ -71,21 +70,8 @@ public class NaviFragment extends BaseLazyFragment {
         initEventAndData();
     }
 
-    public static NaviFragment getInstance() {
-        if (instance == null) {
-            instance = new NaviFragment();
-        }
-        return instance;
-    }
-
-    public static NaviFragment getInstance(String title) {
-        if (instance == null) {
-            Bundle bundle = new Bundle();
-            bundle.putString(TAG, title);
-            instance = new NaviFragment();
-            instance.setArguments(bundle);
-        }
-        return instance;
+    public static NaviFragment newInstance() {
+        return new NaviFragment();
     }
 
     protected void initEventAndData() {
