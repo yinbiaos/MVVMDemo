@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.blankj.utilcode.util.BarUtils;
+import com.mvvm.demo.BaseLazyFragment;
 import com.mvvm.demo.BaseLoadAnimFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.PubActivity;
@@ -35,7 +36,7 @@ import butterknife.BindView;
  *
  * @author Administrator
  */
-public class SystemFragment extends BaseLoadAnimFragment {
+public class SystemFragment extends BaseLazyFragment {
 
     public static final String TAG = "SystemFragment";
     public static final int REQ_CODE = 0x12;
@@ -83,8 +84,11 @@ public class SystemFragment extends BaseLoadAnimFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initEventAndData();
+    }
 
+    @Override
+    protected void onLazyLoad() {
+        initEventAndData();
     }
 
     protected void initEventAndData() {
@@ -98,7 +102,7 @@ public class SystemFragment extends BaseLoadAnimFragment {
             getActivity().startActivityForResult(intent, REQ_CODE);
         });
 
-        viewModel= ViewModelProviders.of(this).get(SystemViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(SystemViewModel.class);
         viewModel.getData();
         viewModel.getResult().observe(this, (ResponseBean<List<SystemDataBean>> result) -> {
             List<SystemDataBean> list = result.getData();

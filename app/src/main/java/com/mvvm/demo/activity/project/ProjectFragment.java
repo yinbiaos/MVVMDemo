@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.mvvm.demo.BaseLoadAnimFragment;
+import com.mvvm.demo.BaseLazyFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.PubActivity;
 import com.mvvm.demo.activity.project.projectlist.ProjectListFragment;
@@ -33,7 +33,7 @@ import butterknife.BindView;
  * @author yinbiao
  * @date 2019/3/8
  */
-public class ProjectFragment extends BaseLoadAnimFragment {
+public class ProjectFragment extends BaseLazyFragment {
 
     public static final String TAG = "ProjectFragment";
 
@@ -69,6 +69,10 @@ public class ProjectFragment extends BaseLoadAnimFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    protected void onLazyLoad() {
         initEventAndData();
     }
 

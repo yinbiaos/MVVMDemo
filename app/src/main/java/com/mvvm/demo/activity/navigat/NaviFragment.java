@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mvvm.demo.BaseLazyFragment;
 import com.mvvm.demo.BaseLoadAnimFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.X5WebView;
@@ -34,7 +35,7 @@ import butterknife.BindView;
  *
  * @author hzy
  */
-public class NaviFragment extends BaseLoadAnimFragment {
+public class NaviFragment extends BaseLazyFragment {
 
     public static final String TAG = "NaviFragment";
     private static NaviFragment instance = null;
@@ -63,6 +64,10 @@ public class NaviFragment extends BaseLoadAnimFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    protected void onLazyLoad() {
         initEventAndData();
     }
 
@@ -84,7 +89,7 @@ public class NaviFragment extends BaseLoadAnimFragment {
     }
 
     protected void initEventAndData() {
-        viewModel= ViewModelProviders.of(this).get(NaviViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(NaviViewModel.class);
         viewModel.getNavi();
         viewModel.getResult().observe(this, (ResponseBean<List<NaviBean>> result) -> {
             List<NaviBean> naviBeanList = result.getData();
