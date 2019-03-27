@@ -1,19 +1,17 @@
 package com.mvvm.demo.activity.register;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.annotation.NonNull;
 
 import com.base.lib.Logs;
-import com.mvvm.demo.entity.LoginBean;
 import com.mvvm.demo.entity.ResponseBean;
 import com.mvvm.demo.http.HttpManager;
 import com.mvvm.demo.http.HttpService;
 import com.mvvm.demo.http.RxSchedulers;
 
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DefaultObserver;
 
 /**
  * Created by hzy on 2019/3/20

@@ -19,7 +19,7 @@
         android:background="@color/c_6c8cff"
         android:orientation="horizontal">
 
-        <android.support.design.widget.TabLayout
+        <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_pub"
             style="@style/TabLayout"
             android:layout_width="0dp"
@@ -46,7 +46,7 @@
             tools:ignore="ContentDescription" />
     </LinearLayout>
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp_pub"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

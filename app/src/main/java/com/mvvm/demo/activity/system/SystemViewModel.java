@@ -1,14 +1,12 @@
 package com.mvvm.demo.activity.system;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+import androidx.annotation.NonNull;
 
 import com.base.lib.Logs;
-import com.mvvm.demo.App;
-import com.mvvm.demo.entity.NaviBean;
 import com.mvvm.demo.entity.ResponseBean;
 import com.mvvm.demo.entity.SystemDataBean;
 import com.mvvm.demo.http.HttpManager;

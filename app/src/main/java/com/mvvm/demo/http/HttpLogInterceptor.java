@@ -1,6 +1,6 @@
 package com.mvvm.demo.http;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.base.lib.Logs;
 

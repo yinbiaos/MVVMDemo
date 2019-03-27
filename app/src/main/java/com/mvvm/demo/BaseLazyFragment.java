@@ -1,7 +1,7 @@
 package com.mvvm.demo;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.base.lib.Logs;
 
@@ -48,7 +48,7 @@ public abstract class BaseLazyFragment extends BaseLoadAnimFragment {
         if (isVisible && !isLazyLoaded && isPrepared) {
             isLazyLoaded = true;
             onLazyLoad();
-            Logs.d(TAG, this.toString() + "setUserVisibleHint.onLazyLoad()");
+            Logs.d(TAG, this.getClass().getSimpleName() + "setUserVisibleHint.onLazyLoad()");
         }
     }
 
