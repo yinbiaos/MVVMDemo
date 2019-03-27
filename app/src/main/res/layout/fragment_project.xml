@@ -30,9 +30,7 @@
             android:background="?attr/selectableItemBackground"
             android:maxHeight="?attr/actionBarSize"
             android:paddingLeft="10dp"
-            android:paddingTop="4dp"
             android:paddingRight="10dp"
-            android:paddingBottom="4dp"
             android:scaleType="center"
             app:srcCompat="@drawable/ic_add_white_24dp"
             tools:ignore="ContentDescription,VectorDrawableCompat" />
