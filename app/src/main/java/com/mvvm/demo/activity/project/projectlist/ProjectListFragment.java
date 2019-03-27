@@ -44,6 +44,9 @@ public class ProjectListFragment extends BaseLazyFragment {
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout mRefreshLayout;
 
+    /**
+     * 项目列表的页码从1开始
+     */
     int pageIndex = 1;
     int cid = 0;
     ProjectListAdapter mAdapter;
@@ -91,8 +94,7 @@ public class ProjectListFragment extends BaseLazyFragment {
             }
 
             @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder,
-                                           int position) {
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
                 return false;
             }
         });
@@ -111,27 +113,26 @@ public class ProjectListFragment extends BaseLazyFragment {
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                viewModel.getProjectList(pageIndex = 0, cid);
+                viewModel.getProjectList(pageIndex = 1, cid);
             }
         });
     }
 
     private void initData() {
-        pageIndex = 1;
         viewModel.getProjectList(pageIndex, cid);
         viewModel.getResult().observe(this, (ResponseBean<ProjectListBean> result) -> {
             if (result == null) {
                 return;
             }
             done();
-            if (pageIndex == 0) {
+            if (pageIndex == 1) {
                 mAdapter.getDatas().clear();
             }
             ProjectListBean bean = result.getData();
             mAdapter.getDatas().addAll(bean.getDatas());
             mAdapter.notifyDataSetChanged();
             if (bean.isOver()) {
-                mRefreshLayout.resetNoMoreData();
+                mRefreshLayout.finishLoadMoreWithNoMoreData();
             } else {
                 pageIndex += 1;
                 mRefreshLayout.finishLoadMore();

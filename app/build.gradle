@@ -52,11 +52,10 @@ dependencies {
     //SmartRefreshLayout下拉刷新上拉加载控件
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-19'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-19'
-
     //工具类  https://github.com/Blankj/AndroidUtilCode/blob/master/utilcode/README-CN.md
     implementation 'com.blankj:utilcode:1.22.10'
-
     //PersistentCookieJar
     implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
-
+    //替换HTML特殊字符
+    implementation 'org.apache.commons:commons-text:1.6'
 }

@@ -1,9 +1,6 @@
 package com.mvvm.demo.activity.project.projectlist;
 
 import android.app.Application;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
-import androidx.annotation.NonNull;
 
 import com.base.lib.Logs;
 import com.mvvm.demo.entity.ProjectListBean;
@@ -12,6 +9,9 @@ import com.mvvm.demo.http.HttpManager;
 import com.mvvm.demo.http.HttpService;
 import com.mvvm.demo.http.RxSchedulers;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 import io.reactivex.disposables.CompositeDisposable;
 
 /**
@@ -78,6 +78,7 @@ public class ProjectListViewModel extends AndroidViewModel {
         disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .insideCollect(id)
                 .compose(RxSchedulers.ioMain())
+                .compose(RxSchedulers.ioMain())
                 .subscribe(responseBean -> {
                     mPosition = position;
                     collectResult.setValue(responseBean);
@@ -89,6 +90,7 @@ public class ProjectListViewModel extends AndroidViewModel {
     public void unCollectArticle(int id, int position) {
         disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .articleListUncollect(id)
+                .compose(RxSchedulers.ioMain())
                 .compose(RxSchedulers.ioMain())
                 .subscribe(responseBean -> {
                     mPosition = position;

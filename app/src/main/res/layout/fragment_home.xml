@@ -12,7 +12,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:srlAccentColor="@color/white"
+        app:srlPrimaryColor="@color/c_444444">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

@@ -11,10 +11,6 @@ public class Constants {
 
     public static final String BASE_URL = "https://www.wanandroid.com";
 
-    /**
-     * 判断是否登录
-     */
-    public static final String ISLOGIN = "isLogin";
     public static final String USERNAME = "USERNAME";
     /**
      * 收藏的ids
