@@ -3,22 +3,20 @@ package com.mvvm.demo.activity;
 import android.Manifest;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.base.lib.IntentUtil;
 import com.base.lib.Logs;
-import com.base.lib.SharedHelper;
 import com.base.lib.ToastUtil;
 import com.mvvm.demo.App;
 import com.mvvm.demo.BaseActivity;
 import com.mvvm.demo.BuildConfig;
 import com.mvvm.demo.CrashHandler;
 import com.mvvm.demo.R;
-import com.mvvm.demo.config.Constants;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
@@ -92,7 +90,6 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFinish() {
-                SharedHelper.getInstance().put(Constants.ISLOGIN, false);
                 IntentUtil.startIntent(mContext, MainActivity.class);
                 finish();
             }

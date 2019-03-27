@@ -6,6 +6,8 @@ import com.mvvm.demo.R;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.util.List;
 
 /**
@@ -21,6 +23,6 @@ public class PubAdapter extends CommonAdapter<String> {
 
     @Override
     protected void convert(ViewHolder holder, String title, int position) {
-        holder.setText(R.id.tv_project, title.replace("&amp;", "&"));
+        holder.setText(R.id.tv_project, StringEscapeUtils.unescapeHtml4(title));
     }
 }

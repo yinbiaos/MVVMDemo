@@ -17,6 +17,8 @@ import com.mvvm.demo.adapter.ViewPagerAdapter;
 import com.mvvm.demo.entity.ProjectBean;
 import com.mvvm.demo.entity.ResponseBean;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,11 +84,8 @@ public class ProjectFragment extends BaseLazyFragment {
     @Override
     protected void onLazyLoad() {
         Logs.d(TAG, "onLazyLoad");
-        initEventAndData();
-    }
-
-    private void initEventAndData() {
         viewModel = ViewModelProviders.of(this).get(ProjectViewModel.class);
+        viewModel.getProjectList();
         viewModel.getResult().observe(this, (ResponseBean<List<ProjectBean>> result) -> {
             if (result == null) {
                 return;
@@ -95,13 +94,11 @@ public class ProjectFragment extends BaseLazyFragment {
                 titleList.clear();
             }
             for (ProjectBean pb : result.getData()) {
-                titleList.add(pb.getName());
+                titleList.add(StringEscapeUtils.unescapeHtml4(pb.getName()));
                 fragmentList.add(ProjectListFragment.newInstance(pb.getId()));
             }
             mPubAdapter.notifyDataSetChanged();
-            mViewPager.setOffscreenPageLimit(fragmentList.size());
         });
-        viewModel.getProjectList();
     }
 
     @Override

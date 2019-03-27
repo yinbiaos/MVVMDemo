@@ -11,6 +11,8 @@ import com.mvvm.demo.listener.OnCollectListener;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.util.List;
 
 /**
@@ -37,10 +39,7 @@ public class ArticleAdapter extends CommonAdapter<ArticleListBean> {
         boolean isNewest = bean.getNiceDate().contains("小时") || bean.getNiceDate().contains("分钟");
         holder.setText(R.id.tv_author, "作者：" + bean.getAuthor());
         holder.setText(R.id.tv_chapterName, "分类:" + bean.getChapterName());
-        holder.setText(R.id.tv_title, bean.getTitle()
-                .replaceAll("&ldquo;", "\"")
-                .replaceAll("&rdquo;", "\"")
-                .replaceAll("&mdash;", "—"));
+        holder.setText(R.id.tv_title, StringEscapeUtils.unescapeHtml4(bean.getTitle()));
         holder.setVisible(R.id.tv_new, isNewest);
         holder.setText(R.id.tv_project, bean.getSuperChapterName());
         holder.setText(R.id.tv_time, "时间：" + bean.getNiceDate());

@@ -7,15 +7,12 @@
     android:background="@color/c_F5F5F5"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/c_f2f2f2"
         app:srlAccentColor="@color/white"
-        app:srlEnableAutoLoadMore="false"
-        app:srlEnablePreviewInEditMode="true"
         app:srlPrimaryColor="@color/c_444444">
 
         <androidx.core.widget.NestedScrollView
