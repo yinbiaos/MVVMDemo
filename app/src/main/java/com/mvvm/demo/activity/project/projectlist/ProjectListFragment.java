@@ -1,18 +1,13 @@
 package com.mvvm.demo.activity.project.projectlist;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.base.lib.ToastUtil;
-import com.mvvm.demo.BaseLoadAnimFragment;
+import com.mvvm.demo.BaseLazyFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.X5WebView;
 import com.mvvm.demo.adapter.ProjectListAdapter;
@@ -26,6 +21,11 @@ import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 /**
@@ -35,7 +35,7 @@ import butterknife.BindView;
  * @author hzy
  */
 
-public class ProjectListFragment extends BaseLoadAnimFragment {
+public class ProjectListFragment extends BaseLazyFragment {
 
     private static final String TAG = "ProjectListFragment";
 
@@ -61,8 +61,7 @@ public class ProjectListFragment extends BaseLoadAnimFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
@@ -74,9 +73,9 @@ public class ProjectListFragment extends BaseLoadAnimFragment {
 
     protected void initEventAndData() {
         viewModel = ViewModelProviders.of(this).get(ProjectListViewModel.class);
-
-        cid = getArguments().getInt(TAG);
-
+        if (getArguments() != null) {
+            cid = getArguments().getInt(TAG);
+        }
         mAdapter = new ProjectListAdapter(getActivity(), projectList);
         mRvProject.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRvProject.setAdapter(mAdapter);
@@ -115,8 +114,6 @@ public class ProjectListFragment extends BaseLoadAnimFragment {
                 viewModel.getProjectList(pageIndex = 0, cid);
             }
         });
-        startLoading(R.id.content);
-        initData();
     }
 
     private void initData() {
@@ -144,7 +141,6 @@ public class ProjectListFragment extends BaseLoadAnimFragment {
 
         viewModel.getUnCollectResult().observe(this, (ResponseBean responseBean) -> {
             if (responseBean == null || responseBean.getErrorCode() != 0) {
-                ToastUtil.showToast(mContext, responseBean.getErrorMsg());
                 return;
             }
             ToastUtil.showToast(mContext, "取消收藏成功");
@@ -154,7 +150,6 @@ public class ProjectListFragment extends BaseLoadAnimFragment {
 
         viewModel.getCollectResult().observe(this, (ResponseBean responseBean) -> {
             if (responseBean == null || responseBean.getErrorCode() != 0) {
-                ToastUtil.showToast(mContext, responseBean.getErrorMsg());
                 return;
             }
             ToastUtil.showToast(mContext, "收藏成功");
@@ -164,4 +159,9 @@ public class ProjectListFragment extends BaseLoadAnimFragment {
     }
 
 
+    @Override
+    protected void onLazyLoad() {
+        startLoading(R.id.content);
+        initData();
+    }
 }

@@ -1,19 +1,14 @@
 package com.mvvm.demo.activity.project;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.base.lib.Logs;
+import com.google.android.material.tabs.TabLayout;
 import com.mvvm.demo.BaseLazyFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.PubActivity;
@@ -26,6 +21,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
 /**
@@ -66,46 +66,42 @@ public class ProjectFragment extends BaseLazyFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    protected void onLazyLoad() {
-        Logs.d(TAG,"onLazyLoad");
-        initEventAndData();
-    }
-
-    private void initEventAndData() {
+        mTablayout.setupWithViewPager(mViewPager);
+        mTablayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        mPubAdapter = new ViewPagerAdapter(getChildFragmentManager(), fragmentList, titleList);
+        mViewPager.setAdapter(mPubAdapter);
+        mViewPager.setOffscreenPageLimit(fragmentList.size());
         mImvMore.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), PubActivity.class);
             intent.putExtra("title", "项目列表");
             intent.putExtra("titleList", (Serializable) titleList);
-            getActivity().startActivityForResult(intent, REQ_CODE);
+            mContext.startActivityForResult(intent, REQ_CODE);
         });
-//        startLoading(R.id.vp_pub);
+    }
+
+    @Override
+    protected void onLazyLoad() {
+        Logs.d(TAG, "onLazyLoad");
+        initEventAndData();
+    }
+
+    private void initEventAndData() {
         viewModel = ViewModelProviders.of(this).get(ProjectViewModel.class);
-        viewModel.getProjectList();
         viewModel.getResult().observe(this, (ResponseBean<List<ProjectBean>> result) -> {
-//            done();
-            List<ProjectBean> projectList = result.getData();
             if (result == null) {
                 return;
             }
             if (null != titleList) {
                 titleList.clear();
             }
-            for (ProjectBean pb : projectList) {
-                Fragment fragment = null;
+            for (ProjectBean pb : result.getData()) {
                 titleList.add(pb.getName());
-                fragment = ProjectListFragment.newInstance(pb.getId());
-                fragmentList.add(fragment);
+                fragmentList.add(ProjectListFragment.newInstance(pb.getId()));
             }
-            mTablayout.setupWithViewPager(mViewPager);
-            mTablayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-            mPubAdapter = new ViewPagerAdapter(getChildFragmentManager(), fragmentList, titleList);
-            mViewPager.setAdapter(mPubAdapter);
+            mPubAdapter.notifyDataSetChanged();
             mViewPager.setOffscreenPageLimit(fragmentList.size());
-            mViewPager.setCurrentItem(0);
         });
+        viewModel.getProjectList();
     }
 
     @Override
