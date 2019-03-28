@@ -131,12 +131,12 @@ public class ProjectListFragment extends BaseLazyFragment {
             ProjectListBean bean = result.getData();
             mAdapter.getDatas().addAll(bean.getDatas());
             mAdapter.notifyDataSetChanged();
+            mRefreshLayout.finishRefresh();
             if (bean.isOver()) {
                 mRefreshLayout.finishLoadMoreWithNoMoreData();
             } else {
                 pageIndex += 1;
                 mRefreshLayout.finishLoadMore();
-                mRefreshLayout.finishRefresh();
             }
         });
 

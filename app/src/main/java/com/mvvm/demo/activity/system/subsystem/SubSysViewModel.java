@@ -1,6 +1,7 @@
 package com.mvvm.demo.activity.system.subsystem;
 
 import android.app.Application;
+
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.annotation.NonNull;
@@ -62,8 +63,7 @@ public class SubSysViewModel extends AndroidViewModel {
     }
 
     public void getData(int page, int cid) {
-        disposable.add(HttpManager.getInstance().getService(HttpService.class).getsubSystem(page,
-                cid)
+        disposable.add(HttpManager.getInstance().getService(HttpService.class).getsubSystem(page, cid)
                 .compose(RxSchedulers.ioMain())
                 .subscribe(responseBean -> {
                     result.setValue(responseBean);

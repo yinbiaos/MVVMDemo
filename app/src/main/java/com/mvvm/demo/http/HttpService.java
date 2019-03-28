@@ -97,8 +97,7 @@ public interface HttpService {
      * @return
      */
     @GET("/article/list/{page}/json")
-    Observable<ResponseBean<KnowledgeSystem>> getsubSystem(@Path("page") int page, @Query(
-            "cid") int cid);
+    Observable<ResponseBean<KnowledgeSystem>> getsubSystem(@Path("page") int page, @Query("cid") int cid);
 
     /**
      * 3.1 导航数据
@@ -205,6 +204,7 @@ public interface HttpService {
      * 6.4 取消收藏
      * 6.4.1 文章列表
      * /lg/uncollect_originId/2333/json
+     *
      * @return
      */
     @POST("/lg/uncollect_originId/{id}/json")
@@ -213,6 +213,7 @@ public interface HttpService {
     /**
      * 6.4 取消收藏
      * 6.4.2 我的收藏页面（该页面包含自己录入的内容）
+     *
      * @return
      */
     @FormUrlEncoded

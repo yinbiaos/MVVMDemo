@@ -90,9 +90,7 @@ public class ProjectFragment extends BaseLazyFragment {
             if (result == null) {
                 return;
             }
-            if (null != titleList) {
-                titleList.clear();
-            }
+            titleList.clear();
             for (ProjectBean pb : result.getData()) {
                 titleList.add(StringEscapeUtils.unescapeHtml4(pb.getName()));
                 fragmentList.add(ProjectListFragment.newInstance(pb.getId()));

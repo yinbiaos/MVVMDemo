@@ -118,12 +118,12 @@ public class HomeFragment extends BaseLazyFragment {
             ArticleBean bean = result.getData();
             adapter.getDatas().addAll(bean.getDatas());
             adapter.notifyDataSetChanged();
+            mRefreshLayout.finishRefresh();
             if (bean.isOver()) {
                 mRefreshLayout.finishLoadMoreWithNoMoreData();
             } else {
                 pageIndex += 1;
                 mRefreshLayout.finishLoadMore();
-                mRefreshLayout.finishRefresh();
             }
         });
 

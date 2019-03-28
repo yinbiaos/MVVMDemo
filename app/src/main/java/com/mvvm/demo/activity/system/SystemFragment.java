@@ -1,19 +1,13 @@
 package com.mvvm.demo.activity.system;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.blankj.utilcode.util.BarUtils;
+import com.google.android.material.tabs.TabLayout;
 import com.mvvm.demo.BaseLazyFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.PubActivity;
@@ -27,6 +21,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
 /**
@@ -39,7 +38,6 @@ public class SystemFragment extends BaseLazyFragment {
 
     public static final String TAG = "SystemFragment";
     public static final int REQ_CODE = 0x12;
-    private static SystemFragment instance = null;
 
     @BindView(R.id.title_bar)
     TitleBarLayout mTitleBar;
@@ -62,59 +60,41 @@ public class SystemFragment extends BaseLazyFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_system, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    protected void onLazyLoad() {
-        initEventAndData();
-    }
-
-    protected void initEventAndData() {
-        BarUtils.setStatusBarVisibility(getActivity(), true);
-        BarUtils.setStatusBarColor(getActivity(), getResources().getColor(R.color.c_6c8cff), 1);
-
-        mImvMore.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), PubActivity.class);
-            intent.putExtra("title", "体系列表");
-            intent.putExtra("titleList", (Serializable) titleList);
-            getActivity().startActivityForResult(intent, REQ_CODE);
-        });
-
-        viewModel = ViewModelProviders.of(this).get(SystemViewModel.class);
-        viewModel.getData();
-        viewModel.getResult().observe(this, (ResponseBean<List<SystemDataBean>> result) -> {
-            List<SystemDataBean> list = result.getData();
-            if (result == null) {
-                return;
-            }
-            updateView(list);
-        });
-    }
-
-    public void updateView(List<SystemDataBean> list) {
-        if (null != titleList) {
-            titleList.clear();
-        }
-        for (SystemDataBean sdb : list) {
-            Fragment fragment = null;
-            titleList.add(sdb.getName());
-            fragment = SubSystemFragment.newInstance(sdb.getChildren());
-            fragmentList.add(fragment);
-        }
         mTablayout.setupWithViewPager(mViewPager);
         mTablayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mPubAdapter = new ViewPagerAdapter(getChildFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(mPubAdapter);
-        mViewPager.setOffscreenPageLimit(5);
-        mViewPager.setCurrentItem(0);
+        mImvMore.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, PubActivity.class);
+            intent.putExtra("title", "体系列表");
+            intent.putExtra("titleList", (Serializable) titleList);
+            startActivityForResult(intent, REQ_CODE);
+        });
+    }
+
+    @Override
+    protected void onLazyLoad() {
+        viewModel = ViewModelProviders.of(this).get(SystemViewModel.class);
+        viewModel.getData();
+        viewModel.getResult().observe(this, (ResponseBean<List<SystemDataBean>> result) -> {
+            if (result == null) {
+                return;
+            }
+            List<SystemDataBean> list = result.getData();
+            titleList.clear();
+            for (SystemDataBean sdb : list) {
+                titleList.add(sdb.getName());
+                fragmentList.add(SubSystemFragment.newInstance(sdb.getChildren()));
+            }
+            mPubAdapter.notifyDataSetChanged();
+        });
     }
 
     @Override

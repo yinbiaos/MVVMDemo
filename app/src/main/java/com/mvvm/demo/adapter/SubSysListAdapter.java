@@ -38,4 +38,9 @@ public class SubSysListAdapter extends CommonAdapter<KnowledgeSystemChildBean> {
                     mOnCollectListener.onCollect(bean.isCollect(), bean.getId(), position);
                 });
     }
+
+    public void clear() {
+        getDatas().clear();
+        notifyDataSetChanged();
+    }
 }
