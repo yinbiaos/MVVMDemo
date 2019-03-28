@@ -61,8 +61,7 @@ public class ProjectFragment extends BaseLazyFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_project, container, false);
     }
 
@@ -78,7 +77,7 @@ public class ProjectFragment extends BaseLazyFragment {
             Intent intent = new Intent(getActivity(), PubActivity.class);
             intent.putExtra("title", "项目列表");
             intent.putExtra("titleList", (Serializable) titleList);
-            mContext.startActivityForResult(intent, REQ_CODE);
+            startActivityForResult(intent, REQ_CODE);
         });
     }
 

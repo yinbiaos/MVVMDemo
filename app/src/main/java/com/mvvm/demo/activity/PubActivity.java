@@ -3,9 +3,6 @@ package com.mvvm.demo.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.mvvm.demo.BaseActivity;
@@ -17,6 +14,10 @@ import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 /**
@@ -53,8 +54,8 @@ public class PubActivity extends BaseActivity {
     protected void initView() {
         title = getIntent().getStringExtra("title");
         titleList = getIntent().getStringArrayListExtra("titleList");
-        mTitleBar.setTitleBarBackgroundColor(getResources().getColor(R.color.c_6c8cff));
-        mTitleBar.setTitleColor(getResources().getColor(R.color.c_ffffff));
+        mTitleBar.setTitleBarBackgroundColor(ContextCompat.getColor(mContext, R.color.c_6c8cff));
+        mTitleBar.setTitleColor(ContextCompat.getColor(mContext, R.color.c_ffffff));
         mTitleBar.setTitle(title);
         mTitleBar.setLeftBack(v -> finish());
         initData();
@@ -74,8 +75,7 @@ public class PubActivity extends BaseActivity {
             }
 
             @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder,
-                                           int position) {
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
                 return false;
             }
         });
