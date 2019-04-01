@@ -10,7 +10,7 @@
         <item name="android:windowTranslucentStatus">false</item>
         <!--设置状态栏的背景颜色-->
         <item name="android:statusBarColor">@color/colorPrimary</item>
-        <!--状态栏Light为false会使用白色字体-->
+        <!--状态栏是否使用明亮样式，决定状态栏的字体和图标颜色-->
         <item name="android:windowLightStatusBar">false</item>
         <!--虚拟导航不透明-->
         <item name="android:windowTranslucentNavigation">false</item>
