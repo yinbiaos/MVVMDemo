@@ -16,7 +16,7 @@
         <item name="android:windowTranslucentNavigation">false</item>
         <!--设置虚拟导航背景颜色-->
         <item name="android:navigationBarColor">@android:color/white</item>
-        <!--设置虚拟导航Light为true，按钮颜色为灰黑色-->
+        <!--虚拟按键栏栏是否使用明亮样式，觉得状态栏的字体颜色-->
         <item name="android:windowLightNavigationBar">true</item>
     </style>
 
