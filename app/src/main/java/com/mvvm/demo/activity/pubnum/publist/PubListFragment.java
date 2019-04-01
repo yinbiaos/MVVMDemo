@@ -1,18 +1,13 @@
 package com.mvvm.demo.activity.pubnum.publist;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.base.lib.ToastUtil;
-import com.mvvm.demo.BaseLoadAnimFragment;
+import com.mvvm.demo.BaseLazyFragment;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.X5WebView;
 import com.mvvm.demo.adapter.PubAddrAdapter;
@@ -21,14 +16,17 @@ import com.mvvm.demo.entity.PubAddrListChild;
 import com.mvvm.demo.entity.ResponseBean;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
-import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 /**
@@ -37,21 +35,19 @@ import butterknife.BindView;
  *
  * @author hzy
  */
-public class PubListFragment extends BaseLoadAnimFragment {
+public class PubListFragment extends BaseLazyFragment {
+
+    private static final String TAG = "PubListFragment";
 
     @BindView(R.id.rv_list)
     RecyclerView mRvList;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout mRefreshLayout;
+    int pageIndex = 1;
+    private int id;
 
     List<PubAddrListChild> mList = new ArrayList<>();
     PubAddrAdapter mAdapter;
-
-    private static final String TAG = "PubListFragment";
-    private int id;
-
-    @BindView(R.id.refreshLayout)
-    SmartRefreshLayout mRefreshLayout;
-    int page = 1;
-    int pageCount = 0;
 
     private PubListViewModel viewModel;
 
@@ -65,8 +61,7 @@ public class PubListFragment extends BaseLoadAnimFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
@@ -93,8 +88,7 @@ public class PubListFragment extends BaseLoadAnimFragment {
             }
 
             @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder,
-                                           int position) {
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
                 return false;
             }
         });
@@ -105,46 +99,43 @@ public class PubListFragment extends BaseLoadAnimFragment {
                 viewModel.collectArticle(id, position);
             }
         });
-        mRefreshLayout.setRefreshHeader(new ClassicsHeader(getActivity()));
-        mRefreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
         mRefreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                if (pageCount > page) {
-                    page++;
-                }
-                viewModel.getList(id, page);
-                refreshLayout.finishLoadMore();
+                viewModel.getList(id, pageIndex);
             }
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                page = 1;
-                viewModel.getList(id, page);
-                refreshLayout.finishRefresh();
+                viewModel.getList(id, pageIndex = 1);
             }
         });
-        initData();
     }
 
     private void initData() {
-        page = 1;
         viewModel = ViewModelProviders.of(this).get(PubListViewModel.class);
-        viewModel.getList(id, page);
+        viewModel.getList(id, pageIndex);
         viewModel.getResult().observe(this, (ResponseBean<PubAddrListBean> result) -> {
-            PubAddrListBean bean = result.getData();
-            page = bean.getCurPage();
-            pageCount = bean.getPageCount();
-            if (page == 1) {
+            if (result == null) {
+                return;
+            }
+            if (pageIndex == 1) {
                 mList.clear();
             }
+            PubAddrListBean bean = result.getData();
             mList.addAll(bean.getDatas());
             mAdapter.notifyDataSetChanged();
+            mRefreshLayout.finishRefresh();
+            if (bean.isOver()) {
+                mRefreshLayout.finishLoadMoreWithNoMoreData();
+            } else {
+                pageIndex += 1;
+                mRefreshLayout.finishLoadMore();
+            }
         });
 
         viewModel.getCollectResult().observe(this, (ResponseBean responseBean) -> {
             if (responseBean == null || responseBean.getErrorCode() != 0) {
-                ToastUtil.showToast(mContext, responseBean.getErrorMsg());
                 return;
             }
             ToastUtil.showToast(mContext, "收藏成功");
@@ -153,12 +144,16 @@ public class PubListFragment extends BaseLoadAnimFragment {
         });
         viewModel.getUnCollectResult().observe(this, (ResponseBean responseBean) -> {
             if (responseBean == null || responseBean.getErrorCode() != 0) {
-                ToastUtil.showToast(mContext, responseBean.getErrorMsg());
                 return;
             }
             ToastUtil.showToast(mContext, "取消收藏成功");
             mAdapter.getDatas().get(viewModel.getPosition()).setCollect(false);
             mAdapter.notifyItemChanged(viewModel.getPosition());
         });
+    }
+
+    @Override
+    protected void onLazyLoad() {
+        initData();
     }
 }

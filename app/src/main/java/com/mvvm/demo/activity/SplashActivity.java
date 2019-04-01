@@ -1,8 +1,10 @@
 package com.mvvm.demo.activity;
 
 import android.Manifest;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.View;
 
 import com.base.lib.IntentUtil;
 import com.base.lib.Logs;
@@ -38,6 +40,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        hideBottomUIMenu();
         requestPermissions();
     }
 
@@ -101,6 +104,23 @@ public class SplashActivity extends BaseActivity {
         super.onDestroy();
         if (!disposable.isDisposed()) {
             disposable.dispose();
+        }
+    }
+
+    /**
+     * 隐藏虚拟按键，并且全屏
+     */
+    protected void hideBottomUIMenu() {
+        if (Build.VERSION.SDK_INT > 15 && Build.VERSION.SDK_INT < 19) {
+            // lower api
+            View v = this.getWindow().getDecorView();
+            v.setSystemUiVisibility(View.GONE);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            //for new api versions.
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
         }
     }
 }

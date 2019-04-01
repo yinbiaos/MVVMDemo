@@ -1,13 +1,7 @@
 package com.mvvm.demo.activity.navigat;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +20,12 @@ import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 /**
@@ -37,8 +37,6 @@ import butterknife.BindView;
 public class NaviFragment extends BaseLazyFragment {
 
     public static final String TAG = "NaviFragment";
-    private static NaviFragment instance = null;
-
 
     @BindView(R.id.rv_list)
     RecyclerView mRvList;
@@ -53,10 +51,13 @@ public class NaviFragment extends BaseLazyFragment {
 
     private NaviViewModel viewModel;
 
+    public static NaviFragment newInstance() {
+        return new NaviFragment();
+    }
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_navi, container, false);
     }
 
@@ -70,75 +71,65 @@ public class NaviFragment extends BaseLazyFragment {
         initEventAndData();
     }
 
-    public static NaviFragment newInstance() {
-        return new NaviFragment();
-    }
-
     protected void initEventAndData() {
         viewModel = ViewModelProviders.of(this).get(NaviViewModel.class);
-        viewModel.getNavi();
         viewModel.getResult().observe(this, (ResponseBean<List<NaviBean>> result) -> {
-            List<NaviBean> naviBeanList = result.getData();
             if (result == null) {
                 return;
             }
+            List<NaviBean> naviBeanList = result.getData();
             updateView(naviBeanList);
         });
+        viewModel.getNavi();
     }
 
     public void updateView(List<NaviBean> naviBeanList) {
         Log.e("NaviFragment", naviBeanList.toString());
         Log.d("updateProject", naviBeanList.toString());
         naviList.addAll(naviBeanList);
-        mRvList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRvList.setLayoutManager(new LinearLayoutManager(mContext));
         naviList.get(0).setChecked(true);
-        mAdapter = new NaviAdapter(getActivity(), naviList);
+        mAdapter = new NaviAdapter(mContext, naviList);
         mRvList.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-
                 for (NaviBean bean : naviList) {
                     bean.setChecked(false);
                 }
                 naviList.get(position).setChecked(true);
                 mAdapter.notifyDataSetChanged();
-
                 naviGridList.clear();
                 naviGridList.addAll(naviBeanList.get(position).getArticles());
                 mGridAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder,
-                                           int position) {
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
                 return false;
             }
         });
 
-        if (null != naviBeanList && naviBeanList.size() > 0) {
+        if (naviBeanList.size() > 0) {
             naviGridList.addAll(naviBeanList.get(0).getArticles());
-            mRvGrid.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-            mGridAdapter = new NaviGridAdapter(getActivity(), naviGridList);
+            mRvGrid.setLayoutManager(new GridLayoutManager(mContext, 2));
+            mGridAdapter = new NaviGridAdapter(mContext, naviGridList);
             mRvGrid.setAdapter(mGridAdapter);
             mGridAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                    Intent intent = new Intent(getActivity(), X5WebView.class);
+                    Intent intent = new Intent(mContext, X5WebView.class);
                     intent.putExtra("mUrl", naviGridList.get(position).getLink());
                     intent.putExtra("mTitle", naviGridList.get(position).getTitle());
                     startActivity(intent);
                 }
 
                 @Override
-                public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder,
-                                               int position) {
+                public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
                     return false;
                 }
             });
         }
-
-
     }
 }

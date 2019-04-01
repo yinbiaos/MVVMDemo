@@ -5,6 +5,7 @@ import android.app.Application;
 import com.base.lib.Logs;
 import com.mvvm.demo.entity.ProjectListBean;
 import com.mvvm.demo.entity.ResponseBean;
+import com.mvvm.demo.http.HttpFilter;
 import com.mvvm.demo.http.HttpManager;
 import com.mvvm.demo.http.HttpService;
 import com.mvvm.demo.http.RxSchedulers;
@@ -78,7 +79,7 @@ public class ProjectListViewModel extends AndroidViewModel {
         disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .insideCollect(id)
                 .compose(RxSchedulers.ioMain())
-                .compose(RxSchedulers.ioMain())
+                .filter(HttpFilter.createLoginFilter())
                 .subscribe(responseBean -> {
                     mPosition = position;
                     collectResult.setValue(responseBean);
@@ -91,7 +92,7 @@ public class ProjectListViewModel extends AndroidViewModel {
         disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .articleListUncollect(id)
                 .compose(RxSchedulers.ioMain())
-                .compose(RxSchedulers.ioMain())
+                .filter(HttpFilter.createLoginFilter())
                 .subscribe(responseBean -> {
                     mPosition = position;
                     unCollectResult.setValue(responseBean);

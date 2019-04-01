@@ -1,6 +1,7 @@
 package com.mvvm.demo.activity.home;
 
 import android.app.Application;
+
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.annotation.NonNull;
@@ -91,6 +92,7 @@ public class HomeViewModel extends AndroidViewModel {
         disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .articleListUncollect(id)
                 .compose(RxSchedulers.ioMain())
+                .filter(HttpFilter.createLoginFilter())
                 .subscribe(responseBean -> {
                     mPosition = position;
                     unCollectResult.setValue(responseBean);

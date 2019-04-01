@@ -1,6 +1,7 @@
 package com.mvvm.demo.activity.pubnum.publist;
 
 import android.app.Application;
+
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 import com.base.lib.Logs;
 import com.mvvm.demo.entity.PubAddrListBean;
 import com.mvvm.demo.entity.ResponseBean;
+import com.mvvm.demo.http.HttpFilter;
 import com.mvvm.demo.http.HttpManager;
 import com.mvvm.demo.http.HttpService;
 import com.mvvm.demo.http.RxSchedulers;
@@ -63,8 +65,7 @@ public class PubListViewModel extends AndroidViewModel {
     }
 
     public void getList(int id, int page) {
-        disposable.add(HttpManager.getInstance().getService(HttpService.class).getPublicAddr(id,
-                page)
+        disposable.add(HttpManager.getInstance().getService(HttpService.class).getPublicAddr(id, page)
                 .compose(RxSchedulers.ioMain())
                 .subscribe(responseBean -> {
                     result.setValue(responseBean);
@@ -78,6 +79,7 @@ public class PubListViewModel extends AndroidViewModel {
         disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .insideCollect(id)
                 .compose(RxSchedulers.ioMain())
+                .filter(HttpFilter.createLoginFilter())
                 .subscribe(responseBean -> {
                     mPosition = position;
                     collectResult.setValue(responseBean);
@@ -91,6 +93,7 @@ public class PubListViewModel extends AndroidViewModel {
         disposable.add(HttpManager.getInstance().getService(HttpService.class)
                 .articleListUncollect(id)
                 .compose(RxSchedulers.ioMain())
+                .filter(HttpFilter.createLoginFilter())
                 .subscribe(responseBean -> {
                     mPosition = position;
                     unCollectResult.setValue(responseBean);
