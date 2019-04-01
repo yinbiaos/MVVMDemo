@@ -4,8 +4,6 @@
     android:id="@+id/appBarLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="@dimen/dp_8"
-    android:fitsSystemWindows="false"
     app:elevation="@dimen/dp_8">
 
     <androidx.appcompat.widget.Toolbar

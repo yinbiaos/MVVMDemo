@@ -3,12 +3,12 @@ package com.mvvm.demo;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.base.lib.Logs;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
