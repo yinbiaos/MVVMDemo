@@ -1,13 +1,9 @@
 package com.mvvm.demo.activity;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mvvm.demo.BaseActivity;
 import com.mvvm.demo.R;
 import com.mvvm.demo.activity.home.HomeFragment;
@@ -20,6 +16,10 @@ import com.mvvm.demo.adapter.ViewPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
 /**
