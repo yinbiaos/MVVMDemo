@@ -1,19 +1,17 @@
 package com.mvvm.demo.activity.home;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.base.lib.Logs;
 import com.base.lib.ToastUtil;
@@ -135,6 +133,7 @@ public class HomeFragment extends BaseLazyFragment {
             adapter.getDatas().get(homeViewModel.getPosition()).setCollect(true);
             adapter.notifyItemChanged(homeViewModel.getPosition());
         });
+
         homeViewModel.getUnCollectResult().observe(this, (ResponseBean responseBean) -> {
             if (responseBean == null || responseBean.getErrorCode() != 0) {
                 return;
