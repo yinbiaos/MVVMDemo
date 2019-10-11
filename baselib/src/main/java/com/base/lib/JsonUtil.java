@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * Created by biao.yin on 2018/5/4.
@@ -40,23 +41,43 @@ public class JsonUtil {
      * @param typeofT        结果集类型
      * @param typeOfArgument 结果集参数类型
      */
-    public static <T> T fromJson(String json, final Type typeofT, final Type typeOfArgument) {
-        Type resultType = new ParameterizedType() {
-            @Override
-            public Type[] getActualTypeArguments() {
-                return new Type[]{typeOfArgument};
-            }
+   public static <T> T fromJson(String json, final Type typeofT, final Type typeOfArgument) {
+        Type resultType;
+        try {
+            //T中的结果集为Object类型
+            resultType = new ParameterizedTypeImpl(typeofT, typeOfArgument);
+            return gson.fromJson(json, resultType);
+        } catch (Exception e) {
+            //T中的结果集为List类型
+            resultType = new ParameterizedTypeImpl(typeofT, new ParameterizedTypeImpl(List.class, typeOfArgument));
+            return gson.fromJson(json, resultType);
+        }
+    }
 
-            @Override
-            public Type getOwnerType() {
-                return null;
-            }
+    static class ParameterizedTypeImpl implements ParameterizedType {
 
-            @Override
-            public Type getRawType() {
-                return typeofT;
-            }
-        };
-        return gson.fromJson(json, resultType);
+        private Type rawType;
+        private Type actualTypeArguments;
+
+        public ParameterizedTypeImpl(Type rawType, Type actualTypeArguments) {
+            this.rawType = rawType;
+            this.actualTypeArguments = actualTypeArguments;
+        }
+
+        @Override
+        public Type[] getActualTypeArguments() {
+            return new Type[]{actualTypeArguments};
+        }
+
+        @Override
+        public Type getRawType() {
+            return rawType;
+        }
+
+        @Nullable
+        @Override
+        public Type getOwnerType() {
+            return null;
+        }
     }
 }
