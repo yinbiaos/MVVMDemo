@@ -42,15 +42,12 @@ public class JsonUtil {
      * @param typeOfArgument 结果集参数类型
      */
    public static <T> T fromJson(String json, final Type typeofT, final Type typeOfArgument) {
-        Type resultType;
         try {
             //T中的结果集为Object类型
-            resultType = new ParameterizedTypeImpl(typeofT, typeOfArgument);
-            return gson.fromJson(json, resultType);
+            return gson.fromJson(json, new ParameterizedTypeImpl(typeofT, typeOfArgument));
         } catch (Exception e) {
             //T中的结果集为List类型
-            resultType = new ParameterizedTypeImpl(typeofT, new ParameterizedTypeImpl(List.class, typeOfArgument));
-            return gson.fromJson(json, resultType);
+            return gson.fromJson(json, new ParameterizedTypeImpl(typeofT, new ParameterizedTypeImpl(List.class, typeOfArgument)));
         }
     }
 
